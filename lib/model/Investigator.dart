@@ -1,6 +1,6 @@
 import 'Skill.dart';
 import 'occupation.dart';
-import 'properties.dart';
+import 'Property.dart';
 //调查员
 
 class Investigator{
@@ -8,7 +8,7 @@ class Investigator{
   String _name;
   int _age;
   Occupation _occupation;
-  Properties _properties;
+  List<Property>_properties;
   List<Skill> _skills;
   String _background;
   String _imageUrl;
@@ -69,9 +69,9 @@ class Investigator{
     _skills = value;
   }
 
-  Properties get properties => _properties;
+  List<Property> get properties => _properties;
 
-  set properties(Properties value) {
+  set properties(List<Property> value) {
     _properties = value;
   }
 
