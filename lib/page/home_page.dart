@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:coc_trpg/model/Investigator.dart';
+import 'package:coc_trpg/model/Property.dart';
 import 'property_page.dart';
+import 'package:coc_trpg/model/Skill.dart';
 class HomePage extends StatefulWidget{
   HomePage({Key key}): super(key: key);
 
@@ -19,6 +21,27 @@ class _HomePage extends State<HomePage>{
   PageView _pageView;
   int _currentPage = 0;
 
+  List<Widget> loadSkillWidgetList(List<Skill> skillList){
+    List<Widget> skillWidgetList = new List();
+    for (var skill in skillList){
+      skillWidgetList.add(
+        new Container(
+          alignment: Alignment.center,
+          child: Flex(
+            direction: Axis.horizontal,
+
+          ),
+        )
+      );
+    }
+
+  }
+
+  List<Widget> loadPropertyWidgetList(List<Property> propertyList){
+    List<Widget> propertyWidgetList = new List();
+  }
+
+
   @override
   void initState(){
     super.initState();
@@ -27,8 +50,8 @@ class _HomePage extends State<HomePage>{
     _pageView = new PageView(
       controller: _pageController,
       children: <Widget>[
-//        PropertyPage(),
-//        PropertyPage()
+        PropertyPage(list:loadSkillWidgetList(investigatorList[0].skills),),
+        PropertyPage(list:loadPropertyWidgetList(investigatorList[0].properties),),
       ],
       onPageChanged: (index){
         setState(() {
@@ -42,13 +65,34 @@ class _HomePage extends State<HomePage>{
 
   void loadInvestigators(){
     Investigator investigator = new Investigator();
-    investigator.name = "莱因哈特";
+    investigator.name = "空调承太郎";
     investigator.imageUrl = "assets/head.jpg";
+    investigator.properties = loadTestProperty();
+    investigator.skills = loadTestSkillList();
     investigatorList.add(investigator);
   }
 
+  List<Property> loadTestProperty(){
+    List<Property> propertyList = new List();
+    for(int i=0;i<8;i++){
+      propertyList.add(new Property("幸运", "LUC", 60));
+    }
+    return propertyList;
+  }
+  List<Skill> loadTestSkillList(){
+    List<Skill> skillList = new List();
+    for(int i=0;i<8;i++){
+      skillList.add(new Skill("侦查", "Search", 60));
+    }
+    return skillList;
+  }
+
+
 
   Widget buildBottomAppbar(){
+
+
+
     return BottomAppBar(
       color: Color(0x44000000),
       shape: CircularNotchedRectangle(), // 底部导航栏打一个圆形的洞
@@ -83,7 +127,7 @@ class _HomePage extends State<HomePage>{
 
         backgroundColor: Colors.transparent,
         appBar:  AppBar(
-          title: Text("name"),
+          title: Text(investigatorList[0].name),
           backgroundColor: Color(0x22000000),
           elevation: 0,
           actions: <Widget>[
@@ -100,47 +144,112 @@ class _HomePage extends State<HomePage>{
           ],
         ),
         bottomNavigationBar: buildBottomAppbar(),
-        body:Column(
+        body:ListView(
+          shrinkWrap: true,
           children: <Widget>[
             Container(
+              padding: EdgeInsets.all(20),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Image.asset(HPImage),
-                  Image.asset(investigatorList[0].imageUrl),
-                  Image.asset(SANImage),
+                  Image.asset(SANImage,width: 40,height: 40,),
+                  Container(
+                    width: 120.0,
+                    height: 120.0,
+                    decoration: new BoxDecoration(
+                      color: Colors.white,
+                      image:new DecorationImage(
+                          image: new AssetImage(investigatorList[0].imageUrl),
+                          fit: BoxFit.cover
+                      ),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  Image.asset(SANImage,width: 40,height: 40,),
                 ],
               ),
             ),
             Container(
+              alignment: Alignment.centerRight,
+              child: RaisedButton(
+                color: Color(0xff20BAC1),
+                child: Container(
+                  constraints: BoxConstraints(
+                    maxWidth: 100,
+                  ),
+                  child:Row(
+                    children: <Widget>[
+                      ImageIcon(AssetImage("assets/icon/function_icon/notebook.png"),),
+                      Text("调查笔记",style: TextStyle(fontSize: 18),),
+
+                    ],
+                  )
+                ),
+                onPressed: (){
+                  
+                },
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 15),
+              alignment: Alignment.centerLeft,
+              constraints: BoxConstraints(
+                maxWidth: 150,
+              ),
               child: Row(
                 children: <Widget>[
-                  Expanded(
-                    child: Container(
+                Container(
+
                       decoration:_currentPage == 0 ? BoxDecoration(
 
-                      ):null,
-                      child: FlatButton(
-                          onPressed: (){},
-                          child: Text("属性")
+                        color: Colors.white,
+                      ):BoxDecoration(
+                        color:  Color(0x22000000),),
+                      child: Center(
+                        child: FlatButton(
+                            onPressed: (){
+                              _pageController.animateToPage(0,
+                                  duration: Duration(milliseconds: 500),
+                                  curve: Curves.decelerate);
+                            },
+                            child: Text("属性",style: TextStyle(fontSize: 18),)
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: Container(
+
+                 Container(
                       decoration:_currentPage == 1 ? BoxDecoration(
 
-                      ):null,
-                      child: FlatButton(
-                          onPressed: (){},
-                          child: Text("技能")
+                        color: Colors.white,
+                      ):BoxDecoration(
+                        color:  Color(0x22000000),
+                      ),
+                      child: Center(
+                        child: FlatButton(
+                            onPressed: (){
+                              _pageController.animateToPage(1,
+                                  duration: Duration(milliseconds: 500),
+                                  curve: Curves.decelerate);
+                            },
+                            child: Text("技能",style: TextStyle(fontSize: 18),)
+                        ),
                       ),
                     ),
-                  ),
 
                 ],
               ),
             ),
-            _pageView,
+            Container(
+              margin: EdgeInsets.fromLTRB(15,0,15,5),
+              constraints: BoxConstraints(
+                maxHeight: 400,
+                maxWidth: 180
+              ),
+              child: _pageView,
+              decoration: BoxDecoration(
+                  color: Color(0x22000000),
+              ),
+            ),
 
           ],
 
