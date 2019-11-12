@@ -1,5 +1,5 @@
 import 'Skill.dart';
-import 'occupation.dart';
+import 'Occupation.dart';
 import 'Property.dart';
 //调查员
 
