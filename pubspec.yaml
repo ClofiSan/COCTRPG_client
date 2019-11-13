@@ -56,6 +56,7 @@ flutter:
     - assets/icon/function_icon/search.png
     - assets/head.jpg
     - assets/icon/function_icon/notebook.png
+    - assets/icon/function_icon/document.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

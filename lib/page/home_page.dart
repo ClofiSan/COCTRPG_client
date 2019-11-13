@@ -3,6 +3,7 @@ import 'package:coc_trpg/model/Investigator.dart';
 import 'package:coc_trpg/model/Property.dart';
 import 'property_page.dart';
 import 'package:coc_trpg/model/Skill.dart';
+import 'package:coc_trpg/utils/config.dart';
 class HomePage extends StatefulWidget{
   HomePage({Key key}): super(key: key);
 
@@ -26,19 +27,48 @@ class _HomePage extends State<HomePage>{
     for (var skill in skillList){
       skillWidgetList.add(
         new Container(
+          margin: EdgeInsets.only(bottom: 5),
           alignment: Alignment.center,
-          child: Flex(
-            direction: Axis.horizontal,
-
-          ),
+          child:Text("${skill.label} ${skill.value}",style: TextStyle(fontSize: 22),)
         )
       );
     }
+    return skillWidgetList;
+
+  }
+
+  Map<String,int> loadPropertyTestData(){
+    Map<String,int> map = Map();
+    for(var item in investigatorList[0].skills){
+      map[item.label] = item.value;
+    }
+    return map;
 
   }
 
   List<Widget> loadPropertyWidgetList(List<Property> propertyList){
     List<Widget> propertyWidgetList = new List();
+    for(var property in propertyList){
+      propertyWidgetList.add(
+        new Container(
+          alignment: Alignment.center,
+          child: Flex(
+              direction:Axis.horizontal,
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Text(property.label,style:TextStyle(fontSize: 22,color: Colors.grey)),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text(property.value.toString(),style:TextStyle(fontSize: 22)),
+              )
+            ],
+          ),
+        )
+      );
+    }
+    return propertyWidgetList;
   }
 
 
@@ -50,8 +80,8 @@ class _HomePage extends State<HomePage>{
     _pageView = new PageView(
       controller: _pageController,
       children: <Widget>[
-        PropertyPage(list:loadSkillWidgetList(investigatorList[0].skills),),
-        PropertyPage(list:loadPropertyWidgetList(investigatorList[0].properties),),
+        PropertyPage(attributeData: investigatorList[0].skills,),
+        PropertyPage(attributeData:investigatorList[0].skills),
       ],
       onPageChanged: (index){
         setState(() {
@@ -75,43 +105,83 @@ class _HomePage extends State<HomePage>{
   List<Property> loadTestProperty(){
     List<Property> propertyList = new List();
     for(int i=0;i<8;i++){
-      propertyList.add(new Property("幸运", "LUC", 60));
+      Property property = Property();
+      property.label = "幸运";
+      property.value = 60;
+      property.name = "LUC";
+      propertyList.add(property);
     }
     return propertyList;
   }
   List<Skill> loadTestSkillList(){
     List<Skill> skillList = new List();
     for(int i=0;i<8;i++){
-      skillList.add(new Skill("侦查", "Search", 60));
+      Skill skill = new Skill();
+      if(i==1){
+        skill.name = "lib";
+        skill.label = "图书馆";
+        skill.value = 60;
+        skillList.add(skill);
+        continue;
+      }
+      skill.name = "Search";
+      skill.label = "侦察";
+      skill.value = 60;
+      skillList.add(skill);
     }
     return skillList;
   }
 
 
+  Widget buildBottomButton(String imageUrl,String name){
+    return Container(
+        constraints: BoxConstraints(
+          maxHeight: 80,
+        ),
+        child:Column(
+          children: <Widget>[
+            IconButton(icon: ImageIcon(AssetImage(imageUrl),size: 40,)),
+            Text(name,style: TextStyle(),)
+          ],
+        )
+    );
+  }
 
   Widget buildBottomAppbar(){
-
-
 
     return BottomAppBar(
       color: Color(0x44000000),
       shape: CircularNotchedRectangle(), // 底部导航栏打一个圆形的洞
       child: Row(
         children: [
-          IconButton(
-            icon: ImageIcon(AssetImage("assets/icon/function_icon/encyclopedia.png"),size: 40,),
-          ),
-          IconButton(icon: ImageIcon(AssetImage("assets/icon/function_icon/coc_rules.png"),size: 40,)),
+          buildBottomButton(AppConfig.encyImage, "百科"),
+          buildBottomButton(AppConfig.ruleImage, "规则"),
           SizedBox(), //中间位置空出
           SizedBox(), //中间位置空出
           SizedBox(), //中间位置空出
-          IconButton(icon: ImageIcon(AssetImage("assets/icon/function_icon/record.png"),size: 40,)),
-          IconButton(icon: ImageIcon(AssetImage("assets/icon/function_icon/individual.png"),size: 40,)),
+          buildBottomButton(AppConfig.documentImage, "档案"),
+          buildBottomButton(AppConfig.individualImage, "我的"),
         ],
         mainAxisAlignment: MainAxisAlignment.spaceAround, //均分底部导航栏横向空间
       ),
     );
   }
+
+  Widget buildIvesHeadImage(String imageUrl){
+    return  Container(
+      width: 150.0,
+      height: 150.0,
+      decoration: new BoxDecoration(
+        color: Colors.white,
+        image:new DecorationImage(
+            image: new AssetImage(imageUrl),
+            fit: BoxFit.cover
+        ),
+        shape: BoxShape.circle,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -124,17 +194,19 @@ class _HomePage extends State<HomePage>{
           )
       ),
       child:Scaffold(
-
         backgroundColor: Colors.transparent,
         appBar:  AppBar(
-          title: Text(investigatorList[0].name),
+          title: Container(
+            alignment: Alignment.center,
+            child: Text(investigatorList[0].name),
+          ),
           backgroundColor: Color(0x22000000),
           elevation: 0,
           actions: <Widget>[
             Container(
               margin: EdgeInsets.only(right: 20),
               child:  IconButton(
-                  icon:ImageIcon(AssetImage("assets/icon/function_icon/search.png"),) ,
+                  icon:ImageIcon(AssetImage(AppConfig.searchImage),) ,
                   onPressed:(){
 
                   }
@@ -153,18 +225,7 @@ class _HomePage extends State<HomePage>{
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Image.asset(SANImage,width: 40,height: 40,),
-                  Container(
-                    width: 120.0,
-                    height: 120.0,
-                    decoration: new BoxDecoration(
-                      color: Colors.white,
-                      image:new DecorationImage(
-                          image: new AssetImage(investigatorList[0].imageUrl),
-                          fit: BoxFit.cover
-                      ),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
+                  buildIvesHeadImage(investigatorList[0].imageUrl),
                   Image.asset(SANImage,width: 40,height: 40,),
                 ],
               ),
@@ -172,15 +233,20 @@ class _HomePage extends State<HomePage>{
             Container(
               alignment: Alignment.centerRight,
               child: RaisedButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(25),
+                      bottomLeft: Radius.circular(25))
+                ),
                 color: Color(0xff20BAC1),
                 child: Container(
                   constraints: BoxConstraints(
-                    maxWidth: 100,
+                    maxWidth: 110,
                   ),
                   child:Row(
                     children: <Widget>[
-                      ImageIcon(AssetImage("assets/icon/function_icon/notebook.png"),),
-                      Text("调查笔记",style: TextStyle(fontSize: 18),),
+                      ImageIcon(AssetImage(AppConfig.noteImage),),
+                      Text("调查笔记",style: TextStyle(fontSize: 20),),
 
                     ],
                   )
@@ -258,7 +324,7 @@ class _HomePage extends State<HomePage>{
         floatingActionButton: FloatingActionButton(
           backgroundColor: Color(0xff20BAC1),
           child: Image.asset(
-            "assets/icon/function_icon/home.png",width: 30,height: 30,),
+            AppConfig.homeImage,width: 30,height: 30,),
           onPressed: (){
 
           },
