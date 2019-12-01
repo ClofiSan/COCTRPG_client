@@ -61,7 +61,7 @@ class _PropertyPage extends State<PropertyPage>{
                         },
                         child:Text(
                           "${widget.attributeData[index].label} ${widget.attributeData[index].value}",
-                          style: TextStyle(fontSize: 22),
+                          style: TextStyle(fontSize: 22,color: currentAttributeIndex == index ? Colors.white:Color(0xffbdbdbd)),
                         )
                     ),
                 );

@@ -1,15 +1,14 @@
-import 'Note.dart';
 class User{
 
+  String _id;
   String _name;
   String _imageUrl;
-  Note _note;
 
 
-  Note get note => _note;
+  String get id => _id;
 
-  set note(Note value) {
-    _note = value;
+  set id(String value) {
+    _id = value;
   }
 
   String get name => _name;

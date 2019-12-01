@@ -4,6 +4,8 @@ import 'package:coc_trpg/model/Property.dart';
 import 'property_page.dart';
 import 'package:coc_trpg/model/Skill.dart';
 import 'package:coc_trpg/utils/config.dart';
+import 'package:coc_trpg/page/note/note_list_page.dart';
+import 'package:coc_trpg/page/create/create_model_page.dart';
 class HomePage extends StatefulWidget{
   HomePage({Key key}): super(key: key);
 
@@ -21,6 +23,8 @@ class _HomePage extends State<HomePage>{
   PageController _pageController;
   PageView _pageView;
   int _currentPage = 0;
+
+
 
   List<Widget> loadSkillWidgetList(List<Skill> skillList){
     List<Widget> skillWidgetList = new List();
@@ -43,7 +47,6 @@ class _HomePage extends State<HomePage>{
       map[item.label] = item.value;
     }
     return map;
-
   }
 
   List<Widget> loadPropertyWidgetList(List<Property> propertyList){
@@ -140,8 +143,13 @@ class _HomePage extends State<HomePage>{
         ),
         child:Column(
           children: <Widget>[
-            IconButton(icon: ImageIcon(AssetImage(imageUrl),size: 40,)),
-            Text(name,style: TextStyle(),)
+            IconButton(
+                icon: ImageIcon(
+                  AssetImage(imageUrl),
+                  color: AppConfig.investigatorMainColor,
+                  size: 40,)
+            ),
+            Text(name,style: TextStyle(color: AppConfig.investigatorMainColor),)
           ],
         )
     );
@@ -181,6 +189,18 @@ class _HomePage extends State<HomePage>{
       ),
     );
   }
+  selectPopItem(IconData icon, String text, String id) {
+    return new PopupMenuItem<String>(
+        value: id,
+        child: new Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            new Icon(icon, color: Colors.white),
+            new Text(text,style: TextStyle(color: Colors.white),),
+          ],
+        )
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -198,21 +218,30 @@ class _HomePage extends State<HomePage>{
         appBar:  AppBar(
           title: Container(
             alignment: Alignment.center,
-            child: Text(investigatorList[0].name),
+            child: Text(investigatorList[0].name,style: TextStyle(color: Colors.white),),
           ),
           backgroundColor: Color(0x22000000),
           elevation: 0,
           actions: <Widget>[
-            Container(
-              margin: EdgeInsets.only(right: 20),
-              child:  IconButton(
-                  icon:ImageIcon(AssetImage(AppConfig.searchImage),) ,
-                  onPressed:(){
 
-                  }
-              )
-              ,
-            ),
+            PopupMenuButton<String>(
+              color: AppConfig.investigatorMinorColor,
+              itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
+                selectPopItem(Icons.add, '添加调查员', 'A'),
+                selectPopItem(Icons.person, '我的调查员', 'B'),
+              ],
+              onSelected: (String action) {
+                // 点击选项的时候
+                switch (action) {
+                  case 'A':
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (BuildContext context) =>CreateModelPage()));
+                    break;
+                  case 'B': break;
+                  case 'C': break;
+                }
+              },
+            )
           ],
         ),
         bottomNavigationBar: buildBottomAppbar(),
@@ -245,14 +274,20 @@ class _HomePage extends State<HomePage>{
                   ),
                   child:Row(
                     children: <Widget>[
-                      ImageIcon(AssetImage(AppConfig.noteImage),),
-                      Text("调查笔记",style: TextStyle(fontSize: 20),),
+                      ImageIcon(
+                        AssetImage(AppConfig.noteImage),
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                      Text("调查笔记",style: TextStyle(fontSize: 20,
+                          color: Colors.white),),
 
                     ],
                   )
                 ),
                 onPressed: (){
-                  
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) =>NoteListPage()));
                 },
               ),
             ),

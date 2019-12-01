@@ -1,3 +1,4 @@
+import 'Note.dart';
 import 'Skill.dart';
 import 'Occupation.dart';
 import 'Property.dart';
@@ -13,7 +14,14 @@ class Investigator{
   String _background;
   String _imageUrl;
   String _equipment;
+  List<Note> _noteList = List();
 
+
+  List<Note> get noteList => _noteList;
+
+  set noteList(List<Note> value) {
+    _noteList = value;
+  }
 
   String get equipment => _equipment;
 

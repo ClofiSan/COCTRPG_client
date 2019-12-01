@@ -24,7 +24,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.grey,
-        primaryColor: Color(0xFF20BAC1)
+//        primaryColor: Color(0xFF20BAC1)
+      primaryColor: Colors.white
       ),
       home: RoleChoosePage()
     );
