@@ -33,7 +33,6 @@ class InvestigatorController{
     for(var name in propertyNameLabelMap.keys){
       propertyList.add(_rollProperty(name,propertyNameLabelMap[name], propertyNameRuleMap[name]));
     }
-    print(propertyList.toString());
     return propertyList;
   }
 

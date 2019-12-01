@@ -23,15 +23,17 @@ class _RandomPropertyPage extends State<RandomPropertyPage>{
 
   Widget _buildPropertyFlexWidget(String label,String value){
     return Flex(
+      mainAxisAlignment: MainAxisAlignment.center,
       direction: Axis.horizontal,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Expanded(
           flex: 1,
-          child: Text(label),
+          child: Text(label,style:TextStyle(fontSize: 18,color: Colors.white,)),
         ),
         Expanded(
           flex: 1,
-          child: Text(value),
+          child: Text(value,style:TextStyle(fontSize: 18,color: Colors.white,)),
         )
       ],
     );
@@ -44,26 +46,32 @@ class _RandomPropertyPage extends State<RandomPropertyPage>{
         Widget flex1 = _buildPropertyFlexWidget(propertyList[i].label,propertyList[i].value.toString());
         Widget flex2;
         if( i + 1 >= propertyList.length){
-          Widget flex2 = _buildPropertyFlexWidget("","");
+           flex2 = _buildPropertyFlexWidget("","");
         }else{
-          Widget flex2 = _buildPropertyFlexWidget(propertyList[++i].label,propertyList[i].value.toString());
+           flex2 = _buildPropertyFlexWidget(propertyList[++i].label,propertyList[i].value.toString());
         }
         _propertyWidgetList.add(
-            new Flex(
+          new Container(
+            margin: EdgeInsets.only(top: 20),
+            child: Flex(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               direction: Axis.horizontal,
               children: <Widget>[
                 Expanded(
                     flex: 1,
                     child: Container(
-                      constraints: BoxConstraints(
-                          maxWidth: 150
-                      ),
-                      child: flex1
+                        alignment: Alignment.center,
+                        constraints: BoxConstraints(
+                            maxWidth: 150
+                        ),
+                        child: flex1
                     )
                 ),
                 Expanded(
                     flex: 1,
                     child: Container(
+                      alignment: Alignment.center,
                       constraints: BoxConstraints(
                           maxWidth: 150
                       ),
@@ -71,7 +79,9 @@ class _RandomPropertyPage extends State<RandomPropertyPage>{
                     )
                 ),
               ],
-            )
+            ),
+          )
+
         );
       }
     }catch (e){
@@ -86,10 +96,8 @@ class _RandomPropertyPage extends State<RandomPropertyPage>{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Container(
-      child: Column(
-        children: buildPropertyList(widget.propertyList)
-      ),
+    return Column(
+      children: buildPropertyList(widget.propertyList),
     );
   }
 

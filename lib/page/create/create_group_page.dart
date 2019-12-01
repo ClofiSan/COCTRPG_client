@@ -20,7 +20,6 @@ class _CreateGroupPage extends State<CreateGroupPage>{
   @override
   void initState(){
     super.initState();
-    List<Property> propertyList = InvestigatorController.loadRandomPropertyList();
     _pageController = PageController();
     _pageView = PageView(
       controller: _pageController,
@@ -52,7 +51,7 @@ class _CreateGroupPage extends State<CreateGroupPage>{
                   duration: Duration(milliseconds: 500),
                   curve: Curves.decelerate);
             },
-            child: Text(text,style: TextStyle(fontSize: 18),)
+            child: Text(text,style: TextStyle(fontSize: 18,color:_currentPage == page ? Colors.black:Colors.white),)
         ),
       ),
     );
@@ -103,7 +102,7 @@ class _CreateGroupPage extends State<CreateGroupPage>{
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(left: 30,top: 15),
+                margin: EdgeInsets.only(left: 30,top: 40),
                 alignment: Alignment.centerLeft,
                 constraints: BoxConstraints(
                   maxWidth:300,
@@ -142,7 +141,22 @@ class _CreateGroupPage extends State<CreateGroupPage>{
                         color: Color(0xffbdbdbd),
                         child: Text("重骰",style: TextStyle(color: Colors.white,fontSize: 18),),
                         onPressed: (){
-
+                          PageView _newPageView = PageView(
+                              controller: _pageController,
+                              children: <Widget>[
+                                RandomPropertyPage(propertyList: InvestigatorController.loadRandomPropertyList(),),
+                                RandomPropertyPage(propertyList: InvestigatorController.loadRandomPropertyList(),),
+                                RandomPropertyPage(propertyList: InvestigatorController.loadRandomPropertyList(),),
+                              ],
+                              onPageChanged: (index){
+                                setState(() {
+                                  _currentPage = index;
+                                });
+                              }
+                          );
+                          setState(() {
+                            _pageView = _newPageView;
+                          });
                         },
                       ),
                     ),
@@ -150,7 +164,7 @@ class _CreateGroupPage extends State<CreateGroupPage>{
                       margin: EdgeInsets.only(left: 20),
                       child:RaisedButton(
                         color: Color(0xff20BAC1),
-                        child: Text("继续",style: TextStyle(color: Colors.white,fontSize: 18),),
+                        child: Text("选择",style: TextStyle(color: Colors.white,fontSize: 18),),
                         onPressed: (){
 
                         },
