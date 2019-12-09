@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'random_property_page.dart';
 import 'package:coc_trpg/controller/investigator_controller.dart';
 import 'package:coc_trpg/model/Property.dart';
+import 'package:coc_trpg/model/Investigator.dart';
+import 'interest_point_page.dart';
 class CreateGroupPage extends StatefulWidget{
   CreateGroupPage({Key key}): super(key: key);
 
@@ -16,17 +18,28 @@ class _CreateGroupPage extends State<CreateGroupPage>{
   PageView _pageView;
   int _currentPage = 0;
   PageController _pageController;
+  List<List<Property>> propertyGroup = List();
+
+
+  void resetPropertyGroup(){
+    propertyGroup.clear();
+    propertyGroup.add(InvestigatorController.loadRandomPropertyList());
+    propertyGroup.add(InvestigatorController.loadRandomPropertyList());
+    propertyGroup.add(InvestigatorController.loadRandomPropertyList());
+
+  }
 
   @override
   void initState(){
     super.initState();
     _pageController = PageController();
+    resetPropertyGroup();
     _pageView = PageView(
       controller: _pageController,
       children: <Widget>[
-        RandomPropertyPage(propertyList: InvestigatorController.loadRandomPropertyList(),),
-        RandomPropertyPage(propertyList: InvestigatorController.loadRandomPropertyList(),),
-        RandomPropertyPage(propertyList: InvestigatorController.loadRandomPropertyList(),),
+        RandomPropertyPage(propertyList: propertyGroup[0],),
+        RandomPropertyPage(propertyList: propertyGroup[1],),
+        RandomPropertyPage(propertyList: propertyGroup[2],),
       ],
       onPageChanged: (index){
         setState(() {
@@ -38,9 +51,7 @@ class _CreateGroupPage extends State<CreateGroupPage>{
 
   Widget buildGroupLabel(String text,int page){
     return  Container(
-
       decoration:_currentPage == page ? BoxDecoration(
-
         color: Colors.white,
       ):BoxDecoration(
         color:  Color(0x22000000),),
@@ -141,12 +152,13 @@ class _CreateGroupPage extends State<CreateGroupPage>{
                         color: Color(0xffbdbdbd),
                         child: Text("重骰",style: TextStyle(color: Colors.white,fontSize: 18),),
                         onPressed: (){
+                          resetPropertyGroup();
                           PageView _newPageView = PageView(
                               controller: _pageController,
                               children: <Widget>[
-                                RandomPropertyPage(propertyList: InvestigatorController.loadRandomPropertyList(),),
-                                RandomPropertyPage(propertyList: InvestigatorController.loadRandomPropertyList(),),
-                                RandomPropertyPage(propertyList: InvestigatorController.loadRandomPropertyList(),),
+                                RandomPropertyPage(propertyList: propertyGroup[0],),
+                                RandomPropertyPage(propertyList: propertyGroup[1],),
+                                RandomPropertyPage(propertyList: propertyGroup[2],),
                               ],
                               onPageChanged: (index){
                                 setState(() {
@@ -166,11 +178,16 @@ class _CreateGroupPage extends State<CreateGroupPage>{
                         color: Color(0xff20BAC1),
                         child: Text("选择",style: TextStyle(color: Colors.white,fontSize: 18),),
                         onPressed: (){
-
+                          List<Property> chosenPropertyList = propertyGroup[_currentPage];
+                          Investigator investigator = Investigator();
+                          investigator.properties = chosenPropertyList;
+                          investigator.HP = InvestigatorController.getInvestigatorHP(chosenPropertyList);
+                          investigator.San = InvestigatorController.getInvestigatorSan(chosenPropertyList);
+                          investigator.MP = InvestigatorController.getInvestigatorMP(chosenPropertyList);
+                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) =>InterestPointPage(investigator: investigator,)));
                         },
                       )
-                    ),
-
+                    )
 
 
                   ],

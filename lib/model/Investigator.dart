@@ -5,6 +5,9 @@ import 'Property.dart';
 //调查员
 
 class Investigator{
+  int _HP;
+  int _San;
+  int _MP;
   int _id;
   String _name;
   int _age;
@@ -14,8 +17,27 @@ class Investigator{
   String _background;
   String _imageUrl;
   String _equipment;
+  String _international;
+  String _language;
+  String _foreignName ;
+  String _gender;
+
   List<Note> _noteList = List();
 
+  String get gender => _gender;
+
+  set gender(String value) {
+    _gender = value;
+  }
+
+
+
+
+  int get HP => _HP;
+
+  set HP(int value) {
+    _HP = value;
+  }
 
   List<Note> get noteList => _noteList;
 
@@ -81,6 +103,36 @@ class Investigator{
 
   set properties(List<Property> value) {
     _properties = value;
+  }
+
+  int get San => _San;
+
+  set San(int value) {
+    _San = value;
+  }
+
+  int get MP => _MP;
+
+  set MP(int value) {
+    _MP = value;
+  }
+
+  String get international => _international;
+
+  set international(String value) {
+    _international = value;
+  }
+
+  String get foreignName => _foreignName;
+
+  set foreignName(String value) {
+    _foreignName = value;
+  }
+
+  String get language => _language;
+
+  set language(String value) {
+    _language = value;
   }
 
 
