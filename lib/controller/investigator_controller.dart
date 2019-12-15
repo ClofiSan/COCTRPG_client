@@ -112,6 +112,16 @@ class InvestigatorController{
     }
     return San;
   }
+  
+  static int getInvestigatorInteresPoint(Investigator investigator){
+    int point = 0;
+    investigator.properties.forEach((e)=>{
+      if(e.name == 'INT'){
+        point = e.value
+      }
+    });
+    return point;
+  }
 
 
 

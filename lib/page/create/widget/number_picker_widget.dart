@@ -22,15 +22,20 @@ class _NumberPickerWidget extends State<NumberPickerWidget>{
   int _begin;
   int _end;
   int _step;
-  double _length;
+  List<int> _scrollList = List();
+  ScrollController _scrollController;
   @override
   void initState() {
     // TODO: implement initState
     _begin = widget.begin;
     _end = widget.end;
     _step = widget.step;
-    _length = (_end - _begin) / _step;
-    print(_length);
+    for(var i = _begin;i<=_end;i+=_step){
+      _scrollList.add(i);
+    }
+    _scrollController = ScrollController(
+
+    );
     super.initState();
   }
 
@@ -43,21 +48,37 @@ class _NumberPickerWidget extends State<NumberPickerWidget>{
         maxWidth: 150
       ),
         decoration: BoxDecoration(
-            gradient: LinearGradient(
-                colors: [Color(0xbb20BAC1), Colors.grey],
-                begin: Alignment.center,
-                end: Alignment.bottomLeft
+            gradient: RadialGradient(
+                colors: [Color(0xAf20BAC1), Colors.grey],
+                radius: 50,
+                center: Alignment.center
             )
         ),
-      child: ListView.builder(
-        itemCount: _length.toInt(),
-          itemBuilder: (context,index){
-            return Container(
-
-              child: Text(index.toString(),style: TextStyle(fontSize: 40),),
-            );
-          }
-      )
+      child: NotificationListener(
+            onNotification: (ScrollNotification note) {
+              //todo : 利用状态管理进行传参
+            print(note.metrics.pixels.toInt());  // 滚动位置。
+          },
+          child:
+            ListView.builder(
+              controller: _scrollController,
+              itemCount: _scrollList.length,
+                itemBuilder: (context,index){
+                  return Container(
+                    height: 50,
+                    padding: EdgeInsets.all(10),
+                    child: Text(
+                      _scrollList[index].toString(),
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white
+                      ),
+                    ),
+                    alignment: Alignment.center,
+                  );
+                }
+            )
+    )
     );
   }
 

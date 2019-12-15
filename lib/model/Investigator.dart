@@ -11,6 +11,7 @@ class Investigator{
   int _id;
   String _name;
   int _age;
+  int _time;
   Occupation _occupation;
   List<Property>_properties;
   List<Skill> _skills;
@@ -23,6 +24,13 @@ class Investigator{
   String _gender;
 
   List<Note> _noteList = List();
+
+
+  int get time => _time;
+
+  set time(int value) {
+    _time = value;
+  }
 
   String get gender => _gender;
 
