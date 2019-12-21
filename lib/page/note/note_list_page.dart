@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:coc_trpg/model/Investigator.dart';
 import 'package:coc_trpg/model/Note.dart';
-import 'package:coc_trpg/utils/config.dart';
+import 'package:coc_trpg/app_theme_data.dart';
 
 class NoteListPage extends StatefulWidget{
   NoteListPage({Key key}): super(key: key);
@@ -88,7 +88,7 @@ class _NoteListPage extends State<NoteListPage>{
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton:FloatingActionButton(
-          backgroundColor: AppConfig.investigatorMainColor,
+          backgroundColor: AppTheme.investigatorMainColor,
           child: Icon(Icons.add,color: Colors.white,),
         ) ,
       ) ,

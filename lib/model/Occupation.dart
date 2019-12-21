@@ -2,11 +2,23 @@ import 'Skill.dart';
 class Occupation{
   String _name;//id
   int _skillPoint;
-  List<int> _credit;
+  List<dynamic> _credit;
   List<Skill> _skills;
+  String _description;
+  String _skillPointRule;
 
 
-  Occupation(this._name, this._skillPoint, this._credit, this._skills);
+  String get skillPointRule => _skillPointRule;
+
+  set skillPointRule(String value) {
+    _skillPointRule = value;
+  }
+
+  String get description => _description;
+
+  set description(String value) {
+    _description = value;
+  }
 
   String get name => _name;
 
@@ -22,9 +34,9 @@ class Occupation{
     _skills = value;
   }
 
-  List<int> get credit => _credit;
+  List<dynamic> get credit => _credit;
 
-  set credit(List<int> value) {
+  set credit(List<dynamic> value) {
     _credit = value;
   }
 

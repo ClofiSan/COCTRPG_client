@@ -107,7 +107,7 @@ class _BaseInfoPage extends State<BaseInfoPage>{
                               hintText: "中文姓名",
                               hintStyle: AppTheme.createBaseInfoHintStyle,
                               border: InputBorder.none,
-                              fillColor: AppConfig.investigatorMinorColor,
+                              fillColor: AppTheme.investigatorMinorColor,
                               filled: true
                           ),
                           validator:(v){
@@ -133,7 +133,7 @@ class _BaseInfoPage extends State<BaseInfoPage>{
                               hintText: "外文姓名(可选)",
                               hintStyle: AppTheme.createBaseInfoHintStyle,
                               border: InputBorder.none,
-                              fillColor: AppConfig.investigatorMinorColor,
+                              fillColor: AppTheme.investigatorMinorColor,
                               filled: true
                           ),
                           validator:(v){
@@ -158,7 +158,7 @@ class _BaseInfoPage extends State<BaseInfoPage>{
                               child: Container(
                                 alignment: Alignment.center,
                                 child: Text("性别",style: TextStyle(fontSize: 22,color: Colors.white),),
-                                color: AppConfig.investigatorMinorColor,
+                                color: AppTheme.investigatorMinorColor,
                                 padding: EdgeInsets.all(5),
                               ),
                             ),
@@ -167,7 +167,7 @@ class _BaseInfoPage extends State<BaseInfoPage>{
                               child: Container(
                                 child:
                                 RadioListTile(
-                                    activeColor: AppConfig.investigatorMainColor,
+                                    activeColor: AppTheme.investigatorMainColor,
                                     title: Text("男",style: TextStyle(fontSize: 22,color: Colors.white)),
                                     value: _manValue,
                                     groupValue: _groupValue,
@@ -184,7 +184,7 @@ class _BaseInfoPage extends State<BaseInfoPage>{
                               child: Container(
                                 child:
                                 RadioListTile(
-                                    activeColor: AppConfig.investigatorMainColor,
+                                    activeColor: AppTheme.investigatorMainColor,
                                     title: Text("女",style: TextStyle(fontSize: 22,color: Colors.white)),
                                     value: _womanValue,
                                     groupValue: _groupValue,
@@ -209,7 +209,7 @@ class _BaseInfoPage extends State<BaseInfoPage>{
                               hintText: "国籍",
                               hintStyle: AppTheme.createBaseInfoHintStyle,
                               border: InputBorder.none,
-                              fillColor: AppConfig.investigatorMinorColor,
+                              fillColor: AppTheme.investigatorMinorColor,
                               filled: true
                           ),
                           validator:(v){
@@ -232,7 +232,7 @@ class _BaseInfoPage extends State<BaseInfoPage>{
                               hintText: "母语(可选)",
                               hintStyle: AppTheme.createBaseInfoHintStyle,
                               border: InputBorder.none,
-                              fillColor: AppConfig.investigatorMinorColor,
+                              fillColor: AppTheme.investigatorMinorColor,
                               filled: true
                           ),
                           validator:(v){

@@ -35,20 +35,8 @@ class AppConfig{
 
   static String noteImage = "assets/icon/function_icon/notebook.png";
 
-  static Color investigatorMainColor = Color(0xbb20BAC1);
 
-  static Color investigatorMinorColor = Color(0x22000000);
-
-
-
-
-  //color
-  static final Map<String,List<Color>> themeColorGradient = {
-    "PL":[Color(0xDd20BAC1), Colors.grey],
-    "KP":[Colors.grey,Colors.white]
-  } ;
-
-
+  //
 
 
 }

@@ -4,6 +4,18 @@ import 'dart:math' as Math;
 
 class InvestigatorController{
 
+  static List<String> propertyList = [
+    "STR",
+    "CON",
+    "DEX",
+    "SIZ",
+    "APP",
+    "INT",
+    "POW",
+    "EDU",
+    "LUC"
+  ];
+
   static final Map<String,String> initPropertyNameLabelMap = {
     "STR":"力量",
     "CON":"体质",
@@ -122,6 +134,30 @@ class InvestigatorController{
     });
     return point;
   }
+
+  String _catchString(String catchChar,String str){
+    return str.startsWith(catchChar) ? str.substring(str.length) : null;
+  }
+
+  String _catchProperty(String str){
+    for (var item in propertyList){
+
+    }
+  }
+
+  int getSkillPointByRules(String rules,Investigator investigator){
+    if(rules.trim() == '') return null;
+    String rest = rules;
+    int sumPoint = 0;
+
+    while(rest != ''){
+      String orRest = _catchString("or", rules);
+      if(orRest != null){
+
+      }
+    }
+  }
+
 
 
 

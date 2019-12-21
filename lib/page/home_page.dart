@@ -6,6 +6,7 @@ import 'package:coc_trpg/model/Skill.dart';
 import 'package:coc_trpg/utils/config.dart';
 import 'package:coc_trpg/page/note/note_list_page.dart';
 import 'package:coc_trpg/page/create/create_model_page.dart';
+import 'package:coc_trpg/app_theme_data.dart';
 class HomePage extends StatefulWidget{
   HomePage({Key key}): super(key: key);
 
@@ -146,10 +147,10 @@ class _HomePage extends State<HomePage>{
             IconButton(
                 icon: ImageIcon(
                   AssetImage(imageUrl),
-                  color: AppConfig.investigatorMainColor,
+                  color: AppTheme.investigatorMainColor,
                   size: 40,)
             ),
-            Text(name,style: TextStyle(color: AppConfig.investigatorMainColor),)
+            Text(name,style: TextStyle(color: AppTheme.investigatorMainColor),)
           ],
         )
     );
@@ -225,7 +226,7 @@ class _HomePage extends State<HomePage>{
           actions: <Widget>[
 
             PopupMenuButton<String>(
-              color: AppConfig.investigatorMinorColor,
+              color: AppTheme.investigatorMinorColor,
               itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
                 selectPopItem(Icons.add, '添加调查员', 'A'),
                 selectPopItem(Icons.person, '我的调查员', 'B'),
