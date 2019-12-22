@@ -50,6 +50,7 @@ class InvestigatorController{
     return propertyList;
   }
 
+
   static Property _rollProperty(String name,String label,String rule){
     int round = 0;
     int sumRollPoint = 0;
@@ -135,27 +136,87 @@ class InvestigatorController{
     return point;
   }
 
-  String _catchString(String catchChar,String str){
-    return str.startsWith(catchChar) ? str.substring(str.length) : null;
+  static String _catchString(String catchChar,String str){
+    return str.startsWith(catchChar) ? str.substring(catchChar.length) : null;
   }
 
-  String _catchProperty(String str){
+  static String _catchProperty(String str){
+
     for (var item in propertyList){
-
-    }
-  }
-
-  int getSkillPointByRules(String rules,Investigator investigator){
-    if(rules.trim() == '') return null;
-    String rest = rules;
-    int sumPoint = 0;
-
-    while(rest != ''){
-      String orRest = _catchString("or", rules);
-      if(orRest != null){
-
+      if(str.startsWith(item.toString())){
+        return item;
       }
     }
+    return null;
+  }
+
+
+  static int _catchNumber(String str){
+    String numberChar = str.substring(0,1);
+    return int.parse(numberChar);
+  }
+  static String _catchEmpty(String str){
+    return str.trimLeft();
+  }
+
+  static int getSkillPointByRules(String rules,Investigator investigator){
+    if(rules.trim() == '') return null;
+    String rest = rules.trim();
+    int sumPoint = 0;
+    int currentPropertyValue = 0;
+    int factor = 1;
+
+    while(rest != ''){
+
+      String orRest = _catchString("or", rest);
+      if(orRest != null){
+        //只可能是属性
+        rest = orRest;
+        String propertyName = _catchProperty(rest);
+        int value = 0;
+        investigator.properties.forEach((e)=>{
+          if(e.name == propertyName){
+            currentPropertyValue = Math.max(e.value,currentPropertyValue)
+          }
+        });
+        rest = _catchString(propertyName, rest);
+        continue;
+      }
+      String addRest = _catchString("+", rest);
+      if(addRest !=null){
+        //只可能是属性
+        rest = _catchEmpty(addRest);
+        sumPoint = currentPropertyValue * factor;
+        currentPropertyValue = 0;
+        factor = 1;
+        continue;
+      }
+      String mulRest = _catchString("*", rest);
+      if(mulRest!= null){
+        //只可能是数字
+
+        rest = _catchEmpty(mulRest);
+        factor = _catchNumber(rest);
+        String numberRest = _catchString(factor.toString(),rest);
+        rest = _catchEmpty(numberRest);
+        continue;
+      }
+      String propertyName = _catchProperty(rest);
+      if(propertyName!=null){
+        rest = _catchString(propertyName,rest);
+        investigator.properties.forEach((e)=>{
+          if(propertyName == e.name){
+            currentPropertyValue = e.value
+          }
+        });
+
+      }
+      rest = _catchEmpty(rest);
+
+    }
+    sumPoint += currentPropertyValue * factor;
+
+    return sumPoint;
   }
 
 

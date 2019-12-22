@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:coc_trpg/controller/investigator_controller.dart';
+import 'package:coc_trpg/controller/InvestigatorController.dart';
 import 'package:coc_trpg/model/Investigator.dart';
 import 'package:coc_trpg/model/Property.dart';
 import 'create_base_info_page.dart';

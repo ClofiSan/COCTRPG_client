@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:coc_trpg/model/Investigator.dart';
-import 'package:coc_trpg/utils/config.dart';
-import 'package:coc_trpg/app_theme_data.dart';
+import 'package:coc_trpg/utils/AppConfig.dart';
+import 'package:coc_trpg/AppThemeData.dart';
 import 'create_age_page.dart';
 class BaseInfoPage extends StatefulWidget{
   BaseInfoPage({Key key, this.investigator}): super(key: key);

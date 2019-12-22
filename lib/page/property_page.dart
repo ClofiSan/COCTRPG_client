@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:coc_trpg/utils/roll_util.dart';
+import 'package:coc_trpg/utils/RollUtil.dart';
 import 'package:coc_trpg/model/Attribute.dart';
 
 class PropertyPage extends StatefulWidget{

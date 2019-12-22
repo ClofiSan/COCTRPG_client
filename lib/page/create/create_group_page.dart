@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'random_property_page.dart';
-import 'package:coc_trpg/controller/investigator_controller.dart';
+import 'package:coc_trpg/controller/InvestigatorController.dart';
 import 'package:coc_trpg/model/Property.dart';
 import 'package:coc_trpg/model/Investigator.dart';
 import 'interest_point_page.dart';

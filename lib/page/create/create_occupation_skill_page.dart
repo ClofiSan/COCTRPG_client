@@ -3,7 +3,7 @@ import './widget/create_title_widget.dart';
 import 'package:coc_trpg/model/Investigator.dart';
 import 'package:coc_trpg/model/Skill.dart';
 import 'package:coc_trpg/model/Occupation.dart';
-import 'package:coc_trpg/app_theme_data.dart';
+import 'package:coc_trpg/AppThemeData.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

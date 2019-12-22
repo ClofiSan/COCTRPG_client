@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:coc_trpg/model/Occupation.dart';
 import 'package:coc_trpg/model/Skill.dart';
-import 'package:coc_trpg/controller/occupation_controller.dart';
 import 'package:coc_trpg/model/Investigator.dart';
-
+import 'package:coc_trpg/controller/InvestigatorController.dart';
 class SkillPointPage extends StatefulWidget{
   SkillPointPage({Key key, this.investigator}): super(key: key);
   final Investigator investigator;
@@ -22,7 +21,8 @@ class _SkillPointPage extends State<SkillPointPage>{
 
   int getProfessionalPoint(){
     int point = 0;
-
+    point = InvestigatorController.getSkillPointByRules(_currentOccupation.skillPointRule, widget.investigator);
+    print(point);
     return point;
   }
 
@@ -36,9 +36,9 @@ class _SkillPointPage extends State<SkillPointPage>{
   @override
   void initState() {
     // TODO: implement initState
+    _currentOccupation = widget.investigator.occupation;
     _professionalPoint = getProfessionalPoint();
     _interestingPoint = getInterestingPoint();
-    _currentOccupation = widget.investigator.occupation;
     super.initState();
   }
 

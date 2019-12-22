@@ -3,10 +3,10 @@ import 'package:coc_trpg/model/Investigator.dart';
 import 'package:coc_trpg/model/Property.dart';
 import 'property_page.dart';
 import 'package:coc_trpg/model/Skill.dart';
-import 'package:coc_trpg/utils/config.dart';
+import 'package:coc_trpg/utils/AppConfig.dart';
 import 'package:coc_trpg/page/note/note_list_page.dart';
 import 'package:coc_trpg/page/create/create_model_page.dart';
-import 'package:coc_trpg/app_theme_data.dart';
+import 'package:coc_trpg/AppThemeData.dart';
 class HomePage extends StatefulWidget{
   HomePage({Key key}): super(key: key);
 

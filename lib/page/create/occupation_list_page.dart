@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:coc_trpg/model/Occupation.dart';
 import 'create_occupation_skill_page.dart';
-import 'package:coc_trpg/app_theme_data.dart';
-import 'package:coc_trpg/app_theme_data.dart';
+import 'package:coc_trpg/AppThemeData.dart';
+import 'package:coc_trpg/AppThemeData.dart';
 class OccupationListPage extends StatefulWidget{
   OccupationListPage({Key key, this.occupationList, this.currentOccupationIndex}): super(key: key);
   final List<Occupation> occupationList;

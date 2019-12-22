@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:coc_trpg/model/Investigator.dart';
 import 'package:coc_trpg/model/Note.dart';
-import 'package:coc_trpg/app_theme_data.dart';
+import 'package:coc_trpg/AppThemeData.dart';
 
 class NoteListPage extends StatefulWidget{
   NoteListPage({Key key}): super(key: key);
