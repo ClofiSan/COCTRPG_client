@@ -37,6 +37,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
       List<String> list= item['skills'].toString().split("，");
       List<Skill> _skillList = List();
       for(var skillLabel in list){
+
         Skill _skill =  Skill();
         _skill.label = skillLabel;
         _skillList.add(_skill);

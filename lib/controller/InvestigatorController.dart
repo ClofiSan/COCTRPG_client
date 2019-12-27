@@ -130,7 +130,7 @@ class InvestigatorController{
     int point = 0;
     investigator.properties.forEach((e)=>{
       if(e.name == 'INT'){
-        point = e.value
+        point = e.value * 2
       }
     });
     return point;

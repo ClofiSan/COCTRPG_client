@@ -11,6 +11,14 @@ class AppTheme {
       color: Colors.white
   );
 
+
+  static TextStyle skillPointTextStyle = TextStyle(
+      fontSize: 18,
+      color:Colors.black
+  );
+
+
+
   static Color investigatorMainColor = Color(0xbb20BAC1);
 
   static Color investigatorMainColorLight = Color(0xff20BAC1);
