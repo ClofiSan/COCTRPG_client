@@ -1,12 +1,26 @@
 import 'Skill.dart';
 class Occupation{
+  int _id;
   String _name;//id
   int _skillPoint;
-  List<dynamic> _credit;
-  List<Skill> _skills;
+  int _minCredit;
+  int _maxCredit;
+  String _skillList;
   String _description;
   String _skillPointRule;
 
+
+  int get minCredit => _minCredit;
+
+  set minCredit(int value) {
+    _minCredit = value;
+  }
+
+  int get id => _id;
+
+  set id(int value) {
+    _id = value;
+  }
 
   String get skillPointRule => _skillPointRule;
 
@@ -28,20 +42,20 @@ class Occupation{
 
   int get skillPoint => _skillPoint;
 
-  List<Skill> get skills => _skills;
-
-  set skills(List<Skill> value) {
-    _skills = value;
-  }
-
-  List<dynamic> get credit => _credit;
-
-  set credit(List<dynamic> value) {
-    _credit = value;
-  }
-
   set skillPoint(int value) {
     _skillPoint = value;
+  }
+
+  int get maxCredit => _maxCredit;
+
+  set maxCredit(int value) {
+    _maxCredit = value;
+  }
+
+  String get skillList => _skillList;
+
+  set skillList(String value) {
+    _skillList = value;
   }
 
 

@@ -4,7 +4,16 @@ class Skill extends Attribute{
 
   String _description;
   int _initial;
+  int _id;
+  int _skillTypeId;
+  int _haveChildSkill;
 
+
+  int get id => _id;
+
+  set id(int value) {
+    _id = value;
+  }
 
   int get initial => _initial;
 
@@ -16,6 +25,18 @@ class Skill extends Attribute{
 
   set description(String value) {
     _description = value;
+  }
+
+  int get skillTypeId => _skillTypeId;
+
+  set skillTypeId(int value) {
+    _skillTypeId = value;
+  }
+
+  int get haveChildSkill => _haveChildSkill;
+
+  set haveChildSkill(int value) {
+    _haveChildSkill = value;
   }
 
 

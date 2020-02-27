@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
-import 'page/role_choose_page.dart';
+import 'package:coc_trpg/panel/page/role_choose_page.dart';
 void main() {
   runApp(MyApp());
 }

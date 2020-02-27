@@ -8,6 +8,9 @@ class Investigator{
   int _HP;
   int _San;
   int _MP;
+  int _MOV;
+  int _Phy;
+  String _dmagePlus;
   int _id;
   String _name;
   int _age;
@@ -25,6 +28,12 @@ class Investigator{
 
   List<Note> _noteList = List();
 
+
+  int get MOV => _MOV;
+
+  set MOV(int value) {
+    _MOV = value;
+  }
 
   int get time => _time;
 
@@ -141,6 +150,18 @@ class Investigator{
 
   set language(String value) {
     _language = value;
+  }
+
+  int get Phy => _Phy;
+
+  set Phy(int value) {
+    _Phy = value;
+  }
+
+  String get dmagePlus => _dmagePlus;
+
+  set dmagePlus(String value) {
+    _dmagePlus = value;
   }
 
 

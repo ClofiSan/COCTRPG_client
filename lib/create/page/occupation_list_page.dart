@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:coc_trpg/model/Occupation.dart';
-import 'create_occupation_skill_page.dart';
+import 'package:coc_trpg/create/page/create_occupation_skill_page.dart';
 import 'package:coc_trpg/AppThemeData.dart';
 import 'package:coc_trpg/AppThemeData.dart';
 class OccupationListPage extends StatefulWidget{

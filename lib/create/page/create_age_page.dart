@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:coc_trpg/model/Investigator.dart';
-import 'widget/create_title_widget.dart';
-import 'widget/number_picker_widget.dart';
-import 'create_occupation_skill_page.dart';
+import '../widget/create_title_widget.dart';
+import '../widget/number_picker_widget.dart';
+import 'package:coc_trpg/create/page/create_occupation_skill_page.dart';
 class CreateAgePage extends StatefulWidget{
   CreateAgePage({Key key, this.investigator}): super(key: key);
   final Investigator investigator;
@@ -13,8 +13,6 @@ class CreateAgePage extends StatefulWidget{
 
 
 class _CreateAgePage extends State<CreateAgePage>{
-
-
 
   CreateTitleWidget _createTitleWidget;
 

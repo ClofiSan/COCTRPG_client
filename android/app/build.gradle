@@ -38,6 +38,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        targetSdkVersion 28
         applicationId "edu.zucc.gats.coc_trpg"
         minSdkVersion 16
         targetSdkVersion 28

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'create_group_page.dart';
+import 'package:coc_trpg/create/page/auto_roll_attr_page.dart';
 class CreateModelPage extends StatefulWidget{
   CreateModelPage({Key key}): super(key: key);
 
@@ -38,7 +38,7 @@ class _CreateModelPage extends State<CreateModelPage>{
         ),
         onPressed: (){
           Navigator.push(context,
-              MaterialPageRoute(builder: (BuildContext context) =>CreateGroupPage()));
+              MaterialPageRoute(builder: (BuildContext context) =>AutoRollAttrPage()));
         },
       )
     );

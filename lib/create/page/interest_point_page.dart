@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:coc_trpg/controller/InvestigatorController.dart';
 import 'package:coc_trpg/model/Investigator.dart';
 import 'package:coc_trpg/model/Property.dart';
-import 'create_base_info_page.dart';
+import 'package:coc_trpg/create/page/create_base_info_page.dart';
 
 class InterestPointPage extends StatefulWidget{
   InterestPointPage({Key key, this.investigator}): super(key: key);
@@ -154,10 +154,16 @@ class _InterestPointPage extends State<InterestPointPage>{
                   Expanded(
                     flex: 1,
                     child:Container(
-                      child: Column(
+                      child: Stack(
                         children: <Widget>[
-                          Image.asset("assets/SAN.png",height: 60,width: 60,),
-                          Text(widget.investigator.San.toString())
+                          Text(widget.investigator.San.toString()),
+                          Image(
+                            image:AssetImage("assets/SAN.png") ,
+                            width: 60,
+                            height: 60,
+                            color: Colors.grey,
+                            colorBlendMode: BlendMode.difference,
+                          ),
                         ],
                       ),
                       constraints: BoxConstraints(

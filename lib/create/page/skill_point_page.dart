@@ -26,10 +26,17 @@ class _SkillPointPage extends State<SkillPointPage>{
 
   loadSkills() async{
 
-    var data = await rootBundle.loadString('assets/occupations.json');
+    var data = await rootBundle.loadString('assets/skills.json');
     var jsonData = json.decode(data);
     for(var item in jsonData){
+      if(item["contains"]!=null){
+        print(item);
+        for(var subItem in item["containers"]){
+          if(subItem["contains"!=null]){
 
+          }
+        }
+      }
     }
   }
 
@@ -75,7 +82,6 @@ class _SkillPointPage extends State<SkillPointPage>{
     // TODO: implement initState
     _currentOccupation = widget.investigator.occupation;
     _investigatorSkillList = widget.investigator.skills;
-    _occupationSkillList = widget.investigator.occupation.skills;
     _professionalPoint = getProfessionalPoint();
     _interestingPoint = getInterestingPoint();
     initChoosableList(_occupationSkillList);
@@ -148,77 +154,7 @@ class _SkillPointPage extends State<SkillPointPage>{
           body: Container(
             child: Column(
               children: <Widget>[
-                Text("技能分配",style: TextStyle(fontSize: 35),),
-                Container(
-                  padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child:   Divider(
-                    thickness: 3,
-                    color: Colors.black,
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-                  child: Column(
-                    children: buildTitleWidget()
-                  )
-                ),
-                Expanded(
-                  child:Container(
-                    margin: EdgeInsets.only(top:10),
-                    width: 200,
-                    child: ListView.builder(
-                      itemCount: _currentOccupation.skills.length,
-                      itemBuilder: (context,index){
-                        if(!_isChoosableSkill(_currentOccupation.skills[index])){
-                          return Flex(
-                            direction: Axis.horizontal,
-                            children: <Widget>[
-                              Expanded(
-                                child: Container(
-                                    padding: EdgeInsets.all(5),
-                                    margin: EdgeInsets.only(top:10),
-                                    color: AppTheme.investigatorMinorColor,
-                                    child: FlatButton(
-                                      onPressed:(){
 
-                                      },
-                                      child: Text(
-                                        _currentOccupation.skills[index].label,
-                                        style: TextStyle(fontSize: 18,color: Colors.white),
-                                      ),
-                                    )
-                                )
-                              ),
-                              Expanded(
-                                child: Row(
-                                  children: <Widget>[
-                                    IconButton(
-                                      icon: Icon(Icons.chevron_left),
-                                      onPressed: (){
-
-                                      },
-                                    ),
-                                    Container(
-                                      child: Text(_currentOccupation.skills[index].initial.toString()),
-                                    ),
-                                    IconButton(
-                                      icon: Icon(Icons.chevron_right),
-                                      onPressed: (){
-
-                                      },
-                                    ),
-
-                                  ],
-                                ),
-                              )
-                            ],
-                          );
-                        }
-                      },
-                    ),
-                  )
-                )
               ],
             )
           ),

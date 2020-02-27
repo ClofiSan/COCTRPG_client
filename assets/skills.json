@@ -6,7 +6,6 @@
     {"label": "魅惑", "name": "Charm", "initial": 15},
     {"label": "说服", "name": "Persuade", "initial": 10},
     {"label": "心理学", "name": "Psychology", "initial": 10},
-    {"label": "信用评级", "name": "Credit Rating", "initial": 0}
   ]
   },
 
@@ -22,7 +21,8 @@
     {"label": "潜水", "name": "Diving", "initial": 1, "tag": ["irregular"]}
   ]
   },
-  {"label": "生存", "name": "Survival", "initial": 0, "contains":
+  {
+    "label": "生存", "name": "Survival", "initial": 0, "contains":
     [
       {"label": "沙漠", "name": "Desert", "initial": 10},
       {"label": "海洋", "name": "Ocean", "initial": 10},
@@ -30,14 +30,15 @@
     ]
   },
 
-    {"label": "隐秘类", "name": "Secret", "contains":
-    [
+    {"label": "隐秘类", "name": "Secret",
+      "contains":
+      [
       {"label": "潜行", "name": "Stealth", "initial": 20},
       {"label": "追踪", "name": "Track", "initial": 10},
       {"label": "乔装", "name": "Disguise", "initial": 5},
       {"label": "锁匠", "name": "Locksmith", "initial": 1},
       {"label": "妙手", "name": "Sleight of Hand", "initial": 10}
-    ]
+      ]
     },
 
   {"label": "学问类", "name": "Knowledge", "contains":
@@ -154,4 +155,7 @@
           {"label": "日语", "name": "Japanese", "initial": 1, "deletable": true},
           {"label": "拉丁语", "name": "Latin", "initial": 1, "deletable": true}
         ]
-      }]}]
+      }
+    ]
+    }
+]

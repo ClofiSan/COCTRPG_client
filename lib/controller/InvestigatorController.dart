@@ -38,7 +38,78 @@ class InvestigatorController{
     "EDU":"2D6",
     "LUC":"3D6"
   };
+  static final List<List<int>> physiqueMap = [
+    [2,64],
+    [65,84],
+    [85,124],
+    [125,164],
+    [165,204]
+  ];
+  static final Map<int,int> iPhysiqueMap ={
+    0:-2,
+    1:-1,
+    2:0,
+    3:1,
+    4:2
+  };
+  static final Map<int,String> physiqueDamageMap = {
+    -2:'-2',
+    -1:'-1',
+    0:'0',
+    1:'+1D4',
+    2:'+1D6'
+  };
 
+  static int getInvestigatorMov(List<Property> propertyList){
+    int dex = 0;
+    int str = 0;
+    int siz = 0;
+    for (var item in propertyList){
+      if(item.name == 'STR'){
+        str = item.value;
+      }
+      if(item.name == 'DEX'){
+        dex = item.value;
+      }
+      if(item.name == 'SIZ'){
+        siz = item.value;
+      }
+    }
+    if(dex>siz&&str>siz){
+      return 9;
+    }else if (dex>siz || str>siz || (str==siz&&str==dex)){
+      return 8;
+    }else if (dex<siz&&str<siz){
+      return 7;
+    }
+    return 7;
+  }
+
+  static int getInvestigatorPhysique(List<Property> propertyList){
+    int sum = 0;
+    for (var item in propertyList){
+      if(item.name == 'STR' || item.name == 'SIZ'){
+        sum += item.value;
+      }
+    }
+    int physique = 2;
+    for(int i=0;i<physiqueMap.length;i++){
+      if(sum < physiqueMap[i][0]){
+        physique = i;
+        break;
+      }
+    }
+    return iPhysiqueMap[physique];
+  }
+
+
+  static int getInvestigatorPropertySum(List<Property> propertyList){
+    int sum = 0;
+    for(var item in propertyList){
+      sum += item.value;
+    }
+    return sum;
+  }
 
   //添加
   static List<Property> loadRandomPropertyList(){

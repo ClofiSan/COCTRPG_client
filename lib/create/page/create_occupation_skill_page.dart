@@ -1,5 +1,5 @@
-import 'occupation_list_page.dart';
-import './widget/create_title_widget.dart';
+import 'package:coc_trpg/create/page/occupation_list_page.dart';
+import '../widget/create_title_widget.dart';
 import 'package:coc_trpg/model/Investigator.dart';
 import 'package:coc_trpg/model/Skill.dart';
 import 'package:coc_trpg/model/Occupation.dart';
@@ -7,7 +7,8 @@ import 'package:coc_trpg/AppThemeData.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'skill_point_page.dart';
+import 'package:coc_trpg/create/page/skill_point_page.dart';
+import 'package:coc_trpg/controller/OccupationController.dart';
 class CreateOccupationSkillPage extends StatefulWidget{
   CreateOccupationSkillPage({Key key, this.investigator}): super(key: key);
   final Investigator investigator;
@@ -33,16 +34,6 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
       Occupation occupation = Occupation();
       occupation.name = item["name"];
       occupation.skillPointRule = item["skillPoint"];
-      occupation.credit = item["credit"];
-      List<String> list= item['skills'].toString().split("，");
-      List<Skill> _skillList = List();
-      for(var skillLabel in list){
-
-        Skill _skill =  Skill();
-        _skill.label = skillLabel;
-        _skillList.add(_skill);
-      }
-      occupation.skills = _skillList;
       _occupationList.add(occupation);
     }
     occupationList = _occupationList;
@@ -105,19 +96,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
   }
 
   Widget buildSkillList(){
-    List<Widget> textWidgetList = List();
-    for(var item in currentOccupation.skills){
-      print(item.name);
-      textWidgetList.add(
-        new Text(item.label,style: AppTheme.createMinorColorBoxDescribeTextStyle,),
-      );
-    }
-    return  Wrap(
-      spacing: 15.0, // 主轴(水平)方向间距
-      runSpacing: 15.0, // 纵轴（垂直）方向间距
-      alignment: WrapAlignment.start,
-      children:textWidgetList
-    );
+
   }
 
   @override
