@@ -14,7 +14,7 @@ class Investigator{
   int _id;
   String _name;
   int _age;
-  int _time;
+  String _time;
   Occupation _occupation;
   List<Property>_properties;
   List<Skill> _skills;
@@ -26,8 +26,18 @@ class Investigator{
   String _foreignName ;
   String _gender;
 
+  String _location;
+  String _hometown;
+
+
   List<Note> _noteList = List();
 
+
+  String get location => _location;
+
+  set location(String value) {
+    _location = value;
+  }
 
   int get MOV => _MOV;
 
@@ -35,9 +45,9 @@ class Investigator{
     _MOV = value;
   }
 
-  int get time => _time;
+  String get time => _time;
 
-  set time(int value) {
+  set time(String value) {
     _time = value;
   }
 
@@ -162,6 +172,12 @@ class Investigator{
 
   set dmagePlus(String value) {
     _dmagePlus = value;
+  }
+
+  String get hometown => _hometown;
+
+  set hometown(String value) {
+    _hometown = value;
   }
 
 

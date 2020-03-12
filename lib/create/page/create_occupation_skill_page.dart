@@ -1,12 +1,10 @@
-import 'package:coc_trpg/create/page/occupation_list_page.dart';
+
 import '../widget/create_title_widget.dart';
 import 'package:coc_trpg/model/Investigator.dart';
 import 'package:coc_trpg/model/Skill.dart';
 import 'package:coc_trpg/model/Occupation.dart';
 import 'package:coc_trpg/AppThemeData.dart';
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:coc_trpg/create/page/skill_point_page.dart';
 import 'package:coc_trpg/controller/OccupationController.dart';
 class CreateOccupationSkillPage extends StatefulWidget{
@@ -16,7 +14,6 @@ class CreateOccupationSkillPage extends StatefulWidget{
   _CreateOccupationSkillPage createState() => _CreateOccupationSkillPage();
 
 }
-
 
 class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
 
@@ -28,17 +25,20 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
   int _currentOccupationIndex = 0;
   loadOccupations() async{
     List<Occupation> _occupationList = List();
-    var data = await rootBundle.loadString('assets/occupations.json');
-    var jsonData = json.decode(data);
-    for(var item in jsonData){
+    var data = await OccupationController.getAllOccupation();
+//    var jsonData = json.decode(data);
+    for(var item in data){
       Occupation occupation = Occupation();
-      occupation.name = item["name"];
-      occupation.skillPointRule = item["skillPoint"];
+      occupation.id = item["occupation_id"];
+      occupation.name = item["occupation_name"];
+      occupation.skillPointRule = item["skill_points_rule"];
+      occupation.skillList = item["skill_list"];
+      occupation.minCredit = item["min_credit"];
+      occupation.maxCredit = item["max_credit"];
       _occupationList.add(occupation);
     }
     occupationList = _occupationList;
   }
-
 
   @override
   void initState(){
@@ -95,13 +95,71 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
     );
   }
 
-  Widget buildSkillList(){
-
+  Widget buildSkillList(String skillList){
+    return Text(skillList,style: AppTheme.createMinorColorBoxDescribeTextStyle,);
   }
+  Widget buildSkillPointRule(String skillPointRule){
+    String str = skillPointRule.replaceAll("\n", " ");
+    return Text(str,style: AppTheme.createMinorColorBoxDescribeTextStyle,);
+  }
+  Widget buildContentContainer(Widget widget){
+    return Container(
+        margin: EdgeInsets.only(top: 15),
+        padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
+        color: AppTheme.investigatorMinorColor,
+        constraints: BoxConstraints(
+            minWidth: MediaQuery.of(context).size.width
+        ),
+        child:  widget
+    );
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    showOccupationDialog(BuildContext context){
+      showDialog(
+          context: context,
+          builder: (context){
+            return AlertDialog(
+              backgroundColor: AppTheme.investigatorMinorColor,
+              title: Text("选择职业",style: AppTheme.dialogTextStyle,),
+              content:
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  child:Container(
+                    child: ListView.builder(
+                        itemCount: occupationList.length,
+                        itemBuilder:(context,index){
+                          return Container(
+                            color: index == _currentOccupationIndex?AppTheme.investigatorMainColor:null,
+                            child: FlatButton(
+                                onPressed: (){
+                                  setState(() {
+                                    _currentOccupationIndex = index;
+                                    Navigator.of(context).pop();
+                                  });
+                                },
+                                child: Text(
+                                  occupationList[index].name,
+                                  style:AppTheme.dialogTextStyle,
+                                )
+                            ),
+                          );
+                        }
+                    ),
+                  )
+              ),
+
+            );
+          }
+      );
+    }
+
+
 
     Widget buildOccupationChosenButton(){
       return Container(
@@ -120,14 +178,15 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
             height: 50,
             child: FlatButton(
               onPressed: (){
-                Navigator.push(context,
-                    new MaterialPageRoute(builder: (context) => new OccupationListPage(
-                      occupationList: occupationList,
-                      currentOccupationIndex: _currentOccupationIndex,
-                    )));
+                showOccupationDialog(context);
+//                Navigator.push(context,
+//                    new MaterialPageRoute(builder: (context) => new OccupationListPage(
+//                      occupationList: occupationList,
+//                      currentOccupationIndex: _currentOccupationIndex,
+//                    )));
               },
               child: Text(
-                currentOccupation.name,
+                occupationList[_currentOccupationIndex].name,
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 20
@@ -145,7 +204,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
             children: <Widget>[
               CreateTitleWidget(
                 title: "职业与技能",
-                description: "调查员不同的职业所对应的职业各有不同，需注意技能点的消耗",
+                description: "不同的职业所对应的技能点各不同",
               ),
               Container(
                 margin: EdgeInsets.fromLTRB(40, 0, 40, 0),
@@ -160,36 +219,18 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                     buildItemTitleWidget("职业"),
                     buildOccupationChosenButton(),
                     buildItemTitleWidget("职业技能"),
+                    buildContentContainer(buildSkillList(occupationList[_currentOccupationIndex].skillList)),
+                    buildItemTitleWidget("技能点"),
+                    buildContentContainer(buildSkillPointRule(occupationList[_currentOccupationIndex].skillPointRule)),
                     Container(
-                      margin: EdgeInsets.only(top: 15),
-                      padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
-                      color: AppTheme.investigatorMinorColor,
-                      constraints: BoxConstraints(
-                          minWidth: MediaQuery.of(context).size.width
-                      ),
-                      child: buildSkillList()
-                    ),
-                    buildItemTitleWidget("详细描述"),
-                    Container(
-                        margin: EdgeInsets.only(top: 15),
-                        padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
-                        color: AppTheme.investigatorMinorColor,
-                        constraints: BoxConstraints(
-                            minWidth: MediaQuery.of(context).size.width
-                        ),
-                        child: currentOccupation.description == null ?
-                        Text("无", style: AppTheme.createMinorColorBoxDescribeTextStyle):
-                        Text(currentOccupation.description, style: AppTheme.createMinorColorBoxDescribeTextStyle)
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 40),
+                      margin: EdgeInsets.only(top: 40,bottom: 40),
                       width: MediaQuery.of(context).size.width,
                       child:RaisedButton(
                           padding: EdgeInsets.only(top: 10,bottom: 10),
                           color: Color(0xff20BAC1),
                           child: Text("下一步",style: TextStyle(color: Colors.white,fontSize: 22),),
                           onPressed: (){
-                            widget.investigator.occupation = currentOccupation;
+                            widget.investigator.occupation = occupationList[_currentOccupationIndex];
                             Navigator.of(context).push(
                                 MaterialPageRoute(
                                     builder: (BuildContext context)=>

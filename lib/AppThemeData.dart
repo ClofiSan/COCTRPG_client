@@ -17,7 +17,10 @@ class AppTheme {
       color:Colors.black
   );
 
-
+  static TextStyle dialogTextStyle = TextStyle(
+      fontSize: 18,
+      color: Colors.white
+  );
 
   static Color investigatorMainColor = Color(0xbb20BAC1);
 

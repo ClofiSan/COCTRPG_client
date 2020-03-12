@@ -60,6 +60,25 @@ class InvestigatorController{
     2:'+1D6'
   };
 
+  static final List<String> timeDescription = [
+    "1820 ~ 1920",
+    "1920 ~ 1990",
+    "1990 ~ 2010",
+    "2010 ~ 至今",
+    "文艺复兴时代",
+    "维多利亚时代",
+    "二战时期",
+    "民国时期",
+    "美苏冷战时期",
+    "大萧条(禁酒令)时期",
+    "嬉皮士时期",
+    "蒸汽朋克",
+    "架空历史",
+    "近未来",
+    "远未来",
+    "其他"
+  ];
+
   static int getInvestigatorMov(List<Property> propertyList){
     int dex = 0;
     int str = 0;
