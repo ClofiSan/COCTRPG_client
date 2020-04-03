@@ -7,6 +7,8 @@ import 'package:coc_trpg/AppThemeData.dart';
 import 'package:flutter/material.dart';
 import 'package:coc_trpg/create/page/skill_point_page.dart';
 import 'package:coc_trpg/controller/OccupationController.dart';
+import 'package:coc_trpg/controller/InvestigatorController.dart';
+import 'package:coc_trpg/create/page/skill_chosen_page.dart';
 class CreateOccupationSkillPage extends StatefulWidget{
   CreateOccupationSkillPage({Key key, this.investigator}): super(key: key);
   final Investigator investigator;
@@ -23,6 +25,25 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
   List<Occupation> occupationList = List();
 
   int _currentOccupationIndex = 0;
+
+  int _professionalPoint = 0 ;
+  int _interestingPoint = 0;
+
+  bool haveOccupation = false;
+
+  int getProfessionalPoint(){
+    int point = 0;
+    point = InvestigatorController.getSkillPointByRules(currentOccupation.skillPointRule, widget.investigator);
+    return point;
+  }
+
+  int getInterestingPoint(){
+    int point = 0;
+    point = InvestigatorController.getInvestigatorInteresPoint(widget.investigator);
+    return point;
+  }
+
+
   loadOccupations() async{
     List<Occupation> _occupationList = List();
     var data = await OccupationController.getAllOccupation();
@@ -38,10 +59,12 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
       _occupationList.add(occupation);
     }
     occupationList = _occupationList;
+
   }
 
   @override
   void initState(){
+
     super.initState();
   }
 
@@ -114,7 +137,107 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
     );
   }
 
+  Widget updateSkillListWidget(Skill skill){
+    List<Widget> widgetList = List();
+    widgetList.add(
+      Flex(
+        direction: Axis.horizontal,
+        children: <Widget>[
+        Expanded(
+        flex: 2,
+        child:Text("技能名"),
+      ),
+      Expanded(
+        flex: 1,
+        child:Text("初始"),
+      ),
+      Expanded(
+        flex: 1,
+        child:Text("职业"),
+      ),
+      Expanded(
+        flex: 1,
+        child:Text("兴趣"),
+      ),
+      Expanded(
+        flex: 1,
+        child:Text("总值"),
+      )
+        ]
+    ));
 
+  }
+
+  Widget buildSkillListWidget(){
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Flex(
+            direction: Axis.horizontal,
+            children: <Widget>[
+              Expanded(
+                flex: 2,
+                child:Text("技能名"),
+              ),
+              Expanded(
+                flex: 1,
+                child:Text("初始"),
+              ),
+              Expanded(
+                flex: 1,
+                child:Text("职业"),
+              ),
+              Expanded(
+                flex: 1,
+                child:Text("兴趣"),
+              ),
+              Expanded(
+                flex: 1,
+                child:Text("总值"),
+              ),
+            ],
+          )
+        ],
+      )
+    );
+  }
+
+  Widget buildSkillPointWidget(String des,int point){
+    return Container(
+      child: Row(
+        children: <Widget>[
+          Container(
+            child: Text(
+              des,
+              style: TextStyle(fontSize: 16,color: Colors.black),
+              textAlign: TextAlign.center,
+            ),
+            margin: EdgeInsets.only(right: 5),
+          ),
+          Container(
+            child: Text(
+              point.toString(),
+              style: TextStyle(fontSize: 16,color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+            margin: EdgeInsets.only(right: 10),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildSkillPointRow(){
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        buildSkillPointWidget("职业点数", _professionalPoint),
+        buildSkillPointWidget("兴趣点数", _interestingPoint),
+        buildSkillPointWidget("总点数", _interestingPoint+_professionalPoint),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,6 +263,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                                 onPressed: (){
                                   setState(() {
                                     _currentOccupationIndex = index;
+                                    haveOccupation = false;
                                     Navigator.of(context).pop();
                                   });
                                 },
@@ -158,8 +282,6 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
           }
       );
     }
-
-
 
     Widget buildOccupationChosenButton(){
       return Container(
@@ -197,6 +319,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
       );
     }
 
+
     Widget buildMainListWidget(){
       currentOccupation = occupationList[0];
       return Container(
@@ -228,26 +351,35 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                       child:RaisedButton(
                           padding: EdgeInsets.only(top: 10,bottom: 10),
                           color: Color(0xff20BAC1),
-                          child: Text("下一步",style: TextStyle(color: Colors.white,fontSize: 22),),
+                          child: Text("添加技能",style: TextStyle(color: Colors.white,fontSize: 22),),
                           onPressed: (){
-                            widget.investigator.occupation = occupationList[_currentOccupationIndex];
-                            Navigator.of(context).push(
+                            currentOccupation = occupationList[_currentOccupationIndex];
+                            widget.investigator.occupation = currentOccupation;
+                            _professionalPoint = getProfessionalPoint();
+                            _interestingPoint = getInterestingPoint();
+                            setState(() {
+                              haveOccupation = true;
+                            });
+                            Navigator.push(
+                                context,
                                 MaterialPageRoute(
-                                    builder: (BuildContext context)=>
-                                        SkillPointPage(investigator: widget.investigator,)
+                                    builder:(BuildContext context)=>SkillChosenPage()
                                 )
                             );
                           }
                       ),
-                    )
+                    ),
+                    haveOccupation?buildSkillPointRow():Container(),
+                    haveOccupation?buildSkillListWidget():Container(),
                   ],
                 ),
               ),
-
             ]
         ),
       );
     }
+
+
     Widget _buildFuture(BuildContext context, AsyncSnapshot snapshot){
       switch (snapshot.connectionState) {
         case ConnectionState.none:

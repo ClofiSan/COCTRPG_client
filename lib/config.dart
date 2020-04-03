@@ -8,5 +8,6 @@ class Config{
   static String loadChildSkills = "/skill/children";
   static String loadSkillById = "/skill";
   static String loadSameTypeSkills = "/skill/sameType";
+  static String loadAllSkillApi = "/skill/all";
 
 }

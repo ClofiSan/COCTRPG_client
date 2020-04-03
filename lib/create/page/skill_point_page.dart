@@ -14,7 +14,9 @@ class SkillPointPage extends StatefulWidget{
   _SkillPointPage createState() => _SkillPointPage();
 }
 
-
+/*
+*
+* */
 class _SkillPointPage extends State<SkillPointPage>{
 
   int _professionalPoint ;
