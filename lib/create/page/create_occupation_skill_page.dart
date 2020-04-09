@@ -9,6 +9,8 @@ import 'package:coc_trpg/create/page/skill_point_page.dart';
 import 'package:coc_trpg/controller/OccupationController.dart';
 import 'package:coc_trpg/controller/InvestigatorController.dart';
 import 'package:coc_trpg/create/page/skill_chosen_page.dart';
+import 'package:coc_trpg/controller/SkillController.dart';
+import 'package:coc_trpg/model/SkillType.dart';
 class CreateOccupationSkillPage extends StatefulWidget{
   CreateOccupationSkillPage({Key key, this.investigator}): super(key: key);
   final Investigator investigator;
@@ -23,6 +25,9 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
   List<Widget> skillWidgetList = List() ;
   List<Skill> skillList = List();
   List<Occupation> occupationList = List();
+  List<String> skillTypeList = List();
+  Map<String,dynamic> skillMap = Map();
+  List<SkillType> allSkill = List();
 
   int _currentOccupationIndex = 0;
 
@@ -30,6 +35,11 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
   int _interestingPoint = 0;
 
   bool haveOccupation = false;
+
+  var _futureBuilderFuture;
+
+  SkillController skillController;
+  OccupationController occupationController ;
 
   int getProfessionalPoint(){
     int point = 0;
@@ -44,28 +54,23 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
   }
 
 
-  loadOccupations() async{
-    List<Occupation> _occupationList = List();
-    var data = await OccupationController.getAllOccupation();
-//    var jsonData = json.decode(data);
-    for(var item in data){
-      Occupation occupation = Occupation();
-      occupation.id = item["occupation_id"];
-      occupation.name = item["occupation_name"];
-      occupation.skillPointRule = item["skill_points_rule"];
-      occupation.skillList = item["skill_list"];
-      occupation.minCredit = item["min_credit"];
-      occupation.maxCredit = item["max_credit"];
-      _occupationList.add(occupation);
-    }
-    occupationList = _occupationList;
-
+  Future loadOccupationsAndSkills() async{
+    skillController = SkillController();
+    occupationController = OccupationController();
+    await occupationController.loadAllOccupation();
+    await skillController.loadSkills();
+    occupationList = occupationController.getAllOccupationList();
+    skillTypeList = skillController.getAllSkillType();
+    allSkill = skillController.getAllSkill();
+    currentOccupation = occupationList[0];
+    _professionalPoint = getProfessionalPoint();
+    _interestingPoint = getInterestingPoint();
   }
 
   @override
   void initState(){
-
     super.initState();
+    _futureBuilderFuture = loadOccupationsAndSkills();
   }
 
   Widget buildItemTitleWidget(String title){
@@ -137,70 +142,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
     );
   }
 
-  Widget updateSkillListWidget(Skill skill){
-    List<Widget> widgetList = List();
-    widgetList.add(
-      Flex(
-        direction: Axis.horizontal,
-        children: <Widget>[
-        Expanded(
-        flex: 2,
-        child:Text("技能名"),
-      ),
-      Expanded(
-        flex: 1,
-        child:Text("初始"),
-      ),
-      Expanded(
-        flex: 1,
-        child:Text("职业"),
-      ),
-      Expanded(
-        flex: 1,
-        child:Text("兴趣"),
-      ),
-      Expanded(
-        flex: 1,
-        child:Text("总值"),
-      )
-        ]
-    ));
 
-  }
-
-  Widget buildSkillListWidget(){
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Flex(
-            direction: Axis.horizontal,
-            children: <Widget>[
-              Expanded(
-                flex: 2,
-                child:Text("技能名"),
-              ),
-              Expanded(
-                flex: 1,
-                child:Text("初始"),
-              ),
-              Expanded(
-                flex: 1,
-                child:Text("职业"),
-              ),
-              Expanded(
-                flex: 1,
-                child:Text("兴趣"),
-              ),
-              Expanded(
-                flex: 1,
-                child:Text("总值"),
-              ),
-            ],
-          )
-        ],
-      )
-    );
-  }
 
   Widget buildSkillPointWidget(String des,int point){
     return Container(
@@ -301,11 +243,6 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
             child: FlatButton(
               onPressed: (){
                 showOccupationDialog(context);
-//                Navigator.push(context,
-//                    new MaterialPageRoute(builder: (context) => new OccupationListPage(
-//                      occupationList: occupationList,
-//                      currentOccupationIndex: _currentOccupationIndex,
-//                    )));
               },
               child: Text(
                 occupationList[_currentOccupationIndex].name,
@@ -321,7 +258,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
 
 
     Widget buildMainListWidget(){
-      currentOccupation = occupationList[0];
+
       return Container(
         child: ListView(
             children: <Widget>[
@@ -345,6 +282,17 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                     buildContentContainer(buildSkillList(occupationList[_currentOccupationIndex].skillList)),
                     buildItemTitleWidget("技能点"),
                     buildContentContainer(buildSkillPointRule(occupationList[_currentOccupationIndex].skillPointRule)),
+                    buildItemTitleWidget("技能选择"),
+                    Container(
+                      margin: EdgeInsets.only(top: 15),
+                      child:buildSkillPointRow(),
+                    ),
+                    Container(
+                      constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width
+                      ),
+                      child: SkillChosenPage(allSkill: allSkill,),
+                    ),
                     Container(
                       margin: EdgeInsets.only(top: 40,bottom: 40),
                       width: MediaQuery.of(context).size.width,
@@ -355,22 +303,12 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                           onPressed: (){
                             currentOccupation = occupationList[_currentOccupationIndex];
                             widget.investigator.occupation = currentOccupation;
-                            _professionalPoint = getProfessionalPoint();
-                            _interestingPoint = getInterestingPoint();
                             setState(() {
                               haveOccupation = true;
                             });
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder:(BuildContext context)=>SkillChosenPage()
-                                )
-                            );
                           }
                       ),
                     ),
-                    haveOccupation?buildSkillPointRow():Container(),
-                    haveOccupation?buildSkillListWidget():Container(),
                   ],
                 ),
               ),
@@ -416,7 +354,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
             ),
             body:FutureBuilder(
                 builder: _buildFuture,
-              future: loadOccupations(),
+              future: _futureBuilderFuture,
             )
         )
     );

@@ -6,6 +6,11 @@ class SkillType {
   List<Skill> _skillList;
 
 
+  @override
+  String toString() {
+    return 'SkillType{_id: $_id, _skillTypeName: $_skillTypeName, _skillList: $_skillList}';
+  }
+
   SkillType(){
     this._skillList = List();
   }

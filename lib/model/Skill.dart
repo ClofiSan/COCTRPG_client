@@ -7,7 +7,30 @@ class Skill extends Attribute{
   int _id;
   int _skillTypeId;
   int _haveChildSkill;
+  int _interestPoint;
+  int _professionalPoint;
+  int _growPoint;
+  List<Skill> _childSkill = List();
 
+
+  int get interestPoint => _interestPoint;
+
+  set interestPoint(int value) {
+    _interestPoint = value;
+  }
+
+  @override
+  String toString() {
+    return 'Skill{_description: $_description, _initial: $_initial, _id: $_id, _skillTypeId: $_skillTypeId, _haveChildSkill: $_haveChildSkill, _childSkill: $_childSkill}';
+  }
+
+
+
+  List<Skill> get childSkill => _childSkill;
+
+  set childSkill(List<Skill> value) {
+    _childSkill = value;
+  }
 
   int get id => _id;
 
@@ -37,6 +60,18 @@ class Skill extends Attribute{
 
   set haveChildSkill(int value) {
     _haveChildSkill = value;
+  }
+
+  int get professionalPoint => _professionalPoint;
+
+  set professionalPoint(int value) {
+    _professionalPoint = value;
+  }
+
+  int get growPoint => _growPoint;
+
+  set growPoint(int value) {
+    _growPoint = value;
   }
 
 

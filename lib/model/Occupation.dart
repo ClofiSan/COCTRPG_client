@@ -10,6 +10,11 @@ class Occupation{
   String _skillPointRule;
 
 
+  @override
+  String toString() {
+    return 'Occupation{_id: $_id, _name: $_name, _skillPoint: $_skillPoint, _minCredit: $_minCredit, _maxCredit: $_maxCredit, _skillList: $_skillList, _description: $_description, _skillPointRule: $_skillPointRule}';
+  }
+
   int get minCredit => _minCredit;
 
   set minCredit(int value) {
