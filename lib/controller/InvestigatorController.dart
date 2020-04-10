@@ -185,6 +185,15 @@ class InvestigatorController{
     return hp;
   }
 
+  static int getInvestigatorPropertyValue(Investigator investigator,String propertyName){
+    int re = 0;
+    investigator.properties.forEach((e)=>{
+      if(e.name == propertyName){
+          re =  e.value
+      }
+    });
+    return re;
+  }
 
   static int getInvestigatorMP(List<Property> propertyList){
     int POW = 0;

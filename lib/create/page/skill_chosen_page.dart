@@ -51,7 +51,7 @@ class _SkillChosenPage extends State<SkillChosenPage>{
 
   }
 
-  Widget skillTypeSmallPage(sameSkills){
+  Widget skillTypeSmallPage(List<Skill> sameSkills){
 //    print(sameSkills.toString());
     return Container(
       child: ListView.builder(
@@ -61,16 +61,63 @@ class _SkillChosenPage extends State<SkillChosenPage>{
             return Container(
                 child:FlatButton(
                     onPressed: (){
+                      if(sameSkills[index].childSkill.length!=0){
+
+                      }
                       showModalBottomSheet(
                         context: context,
                         builder: (BuildContext context) {
                           return Container(
-                            height: 150,
-//                            color: AppTheme.investigatorMinorColor,
-                            child: Column(
+                            height: MediaQuery.of(context).size.width,
+                            child: Flex(
+                              direction: Axis.horizontal,
                               children: <Widget>[
-                                Text(sameSkills[index].label),
-                                Text(sameSkills[index].description),
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(sameSkills[index].label,style: TextStyle(fontSize: 20,color: Colors.white),),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child: Column(
+                                    children: <Widget>[
+                                      Row(
+                                        children: <Widget>[
+                                          Text("初始"),
+                                          Text(sameSkills[index].initial.toString())
+                                        ],
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Text("职业"),
+                                          Text(sameSkills[index].professionalPoint.toString())
+                                        ],
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Text("兴趣"),
+                                          Text(sameSkills[index].interestPoint.toString())
+                                        ],
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Text("总值"),
+                                          Text(sameSkills[index].value.toString())
+                                        ],
+                                      ),
+                                      Wrap(
+                                        children: <Widget>[
+                                          Text("描述"),
+                                          sameSkills[index].description!=null?Text(sameSkills[index].description):Text("无"),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
                               ],
                             ),
                             decoration: BoxDecoration(
@@ -81,12 +128,25 @@ class _SkillChosenPage extends State<SkillChosenPage>{
                       );
                     },
                     child: Container(
+                      alignment: Alignment.center,
                       child: Flex(
                           direction: Axis.horizontal,
                         children: <Widget>[
                           Expanded(
-                            flex: 1,
+                            flex: 2,
                             child: Text(sameSkills[index].label,style: TextStyle(color: Colors.white),),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(sameSkills[index].initial.toString(),style: TextStyle(color: Colors.white),),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(sameSkills[index].professionalPoint.toString(),style: TextStyle(color: Colors.white),),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(sameSkills[index].interestPoint.toString(),style: TextStyle(color: Colors.white),),
                           ),
                           Expanded(
                             flex: 1,
@@ -128,7 +188,39 @@ class _SkillChosenPage extends State<SkillChosenPage>{
       ),
     );
   }
-
+  Widget buildSkillTableTitle(){
+    return Container(
+      alignment: Alignment.center,
+      margin: EdgeInsets.only(top: 5),
+      padding: EdgeInsets.only(left: 15,right: 15),
+      color: AppTheme.investigatorMinorColor,
+      child: Flex(
+        direction: Axis.horizontal,
+        children: <Widget>[
+          Expanded(
+            flex: 2,
+            child: Text("技能名",style: TextStyle(color: Colors.black)),
+          ),
+          Expanded(
+            flex: 1,
+            child: Text("初始",style: TextStyle(color: Colors.black)),
+          ),
+          Expanded(
+            flex: 1,
+            child: Text("职业",style: TextStyle(color: Colors.black)),
+          ),
+          Expanded(
+            flex: 1,
+            child: Text("兴趣",style: TextStyle(color: Colors.black)),
+          ),
+          Expanded(
+            flex: 1,
+            child: Text("总值",style: TextStyle(color: Colors.black)),
+          ),
+        ],
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -137,9 +229,9 @@ class _SkillChosenPage extends State<SkillChosenPage>{
         child: Column(
         children: <Widget>[
           buildSkillTypeButton(),
-
+          buildSkillTableTitle(),
           Container(
-            margin: EdgeInsets.fromLTRB(15,5,15,5),
+            margin: EdgeInsets.fromLTRB(0,0,0,5),
             width: MediaQuery.of(context).size.width,
             constraints: BoxConstraints(
                 maxHeight: 400,

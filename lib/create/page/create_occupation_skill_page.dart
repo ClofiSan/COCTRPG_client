@@ -58,7 +58,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
     skillController = SkillController();
     occupationController = OccupationController();
     await occupationController.loadAllOccupation();
-    await skillController.loadSkills();
+    await skillController.loadSkills(widget.investigator);
     occupationList = occupationController.getAllOccupationList();
     skillTypeList = skillController.getAllSkillType();
     allSkill = skillController.getAllSkill();
@@ -287,6 +287,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                       margin: EdgeInsets.only(top: 15),
                       child:buildSkillPointRow(),
                     ),
+
                     Container(
                       constraints: BoxConstraints(
                           maxWidth: MediaQuery.of(context).size.width

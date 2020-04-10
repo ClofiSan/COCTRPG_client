@@ -13,6 +13,12 @@ class Skill extends Attribute{
   List<Skill> _childSkill = List();
 
 
+  Skill(){
+    _interestPoint = 0;
+    _professionalPoint = 0;
+    _growPoint = 0;
+  }
+
   int get interestPoint => _interestPoint;
 
   set interestPoint(int value) {
