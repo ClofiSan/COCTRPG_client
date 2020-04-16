@@ -77,6 +77,7 @@ class _BaseInfoPage extends State<BaseInfoPage>{
     }catch (e){
       print(e);
     }
+
     Navigator.push(context, new MaterialPageRoute(builder: (context) => new CreateAgePage(investigator: widget.investigator,)));
   }
 

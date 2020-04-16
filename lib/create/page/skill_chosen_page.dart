@@ -3,6 +3,8 @@ import 'package:coc_trpg/model/Skill.dart';
 import 'package:coc_trpg/controller/SkillController.dart';
 import 'package:coc_trpg/AppThemeData.dart';
 import 'package:coc_trpg/model/SkillType.dart';
+import 'package:provider/provider.dart';
+import 'package:coc_trpg/store/CreateInvestigatorStore.dart';
 class SkillChosenPage extends StatefulWidget{
   SkillChosenPage({Key key,  this.allSkill}): super(key: key);
  final List<SkillType> allSkill;
@@ -22,11 +24,16 @@ class _SkillChosenPage extends State<SkillChosenPage>{
   int currentPage;
 
   TextEditingController _controller = TextEditingController();
+  int tmpInterestedPoint = 0;
+  int tmpProfessionalPoint = 0;
+  int tmpGrowPoint = 0;
+
+  List<SkillType> allSkill = List();
 
   @override
   void initState() {
     // TODO: implement initState
-    for(var item in widget.allSkill){
+    for(var item in Provider.of<CreateInvestigatorStore>(context,listen: false).investigator.allSkill){
       skillTypeList.add(item.skillTypeName);
       print(item.skillTypeName);
       skillMap[item.skillTypeName] = item.skillList;
@@ -35,7 +42,7 @@ class _SkillChosenPage extends State<SkillChosenPage>{
     pageView = PageView(
       controller: pageController,
       children: <Widget>[
-        skillTypeSmallPage(skillMap[skillTypeList[0]]),
+        skillTypeSmallPage(Provider.of<CreateInvestigatorStore>(context,listen: false).investigator.allSkill[0].skillList),
         skillTypeSmallPage(skillMap[skillTypeList[1]]),
         skillTypeSmallPage(skillMap[skillTypeList[2]]),
         skillTypeSmallPage(skillMap[skillTypeList[3]]),
@@ -89,28 +96,6 @@ class _SkillChosenPage extends State<SkillChosenPage>{
                                         Row(
                                           children: <Widget>[
                                             Text("初始"),
-                                            Container(
-                                              width: MediaQuery.of(context).size.width*0.4,
-                                              height: 30,
-                                              child: TextField(
-                                                controller: _controller,
-                                                textAlign: TextAlign.center,
-                                                decoration: InputDecoration(
-                                                  hintText: sameSkills[index].initial.toString(),
-                                                    hintStyle: TextStyle(fontSize: 16,color: Colors.grey),
-                                                    border: InputBorder.none,
-                                                    fillColor: AppTheme.investigatorMinorColor,
-                                                    filled: true,
-                                                    errorStyle: TextStyle(color: Colors.red[600])
-                                                ),
-                                                onChanged: (v){
-                                                  setState(() {
-                                                    sameSkills[index].initial = v as int;
-                                                    print(v);
-                                                  });
-                                                },
-                                              ),
-                                            ),
                                           ],
                                         ),
                                         Row(
@@ -119,6 +104,27 @@ class _SkillChosenPage extends State<SkillChosenPage>{
                                             Text(
                                                 sameSkills[index].professionalPoint.toString(),
                                                 style: TextStyle(color: Colors.white)
+                                            ),
+                                            Container(
+                                              width: MediaQuery.of(context).size.width*0.4,
+                                              height: 30,
+                                              child: TextField(
+                                                controller: _controller,
+                                                textAlign: TextAlign.center,
+                                                decoration: InputDecoration(
+                                                    hintText: sameSkills[index].professionalPoint.toString(),
+                                                    hintStyle: TextStyle(fontSize: 16,color: Colors.grey),
+                                                    border: InputBorder.none,
+                                                    fillColor: AppTheme.investigatorMinorColor,
+                                                    filled: true,
+                                                    errorStyle: TextStyle(color: Colors.red[600])
+                                                ),
+                                                onChanged: (v){
+                                                  setState(() {
+                                                    tmpProfessionalPoint = int.parse(v);
+                                                  });
+                                                },
+                                              ),
                                             ),
 
                                           ],
@@ -170,8 +176,15 @@ class _SkillChosenPage extends State<SkillChosenPage>{
                                             child: Text("确定"),
                                           ),
                                           onPressed: (){
-                                            setState(() {
-                                              sameSkills[index].initial = 30;
+                                            Provider.of<CreateInvestigatorStore>(context,listen: false).changeSkillValue(
+                                                sameSkills[index].label,
+                                                2,
+                                                2,
+                                                2
+                                            );
+                                            Future.delayed(Duration(seconds: 5), (){
+                                              Navigator.of(context).pop();
+                                              print('延时1s执行');
                                             });
 
                                           },

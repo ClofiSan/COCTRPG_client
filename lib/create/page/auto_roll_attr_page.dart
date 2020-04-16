@@ -5,6 +5,8 @@ import 'package:coc_trpg/model/Property.dart';
 import 'package:coc_trpg/model/Investigator.dart';
 import 'package:coc_trpg/create/page/interest_point_page.dart';
 import 'package:coc_trpg/AppThemeData.dart';
+import 'package:provider/provider.dart';
+import 'package:coc_trpg/store/CreateInvestigatorStore.dart';
 class AutoRollAttrPage extends StatefulWidget{
   AutoRollAttrPage({Key key}): super(key: key);
 
@@ -207,11 +209,13 @@ class _AutoRollAttrPage extends State<AutoRollAttrPage>{
                         color: Color(0xff20BAC1),
                         child: Text("选择",style: TextStyle(color: Colors.white,fontSize: 18),),
                         onPressed: (){
+
                           Investigator investigator = Investigator();
                           investigator.properties = property;
                           investigator.HP = InvestigatorController.getInvestigatorHP(property);
                           investigator.San = InvestigatorController.getInvestigatorSan(property);
                           investigator.MP = InvestigatorController.getInvestigatorMP(property);
+                          Provider.of<CreateInvestigatorStore>(context,listen: false).investigator = investigator;
                           Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) =>InterestPointPage(investigator: investigator,)));
                         },
                       )

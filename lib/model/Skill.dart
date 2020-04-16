@@ -1,6 +1,8 @@
-import 'Attribute.dart';
+import 'package:flutter/material.dart';
 
-class Skill extends Attribute{
+import 'Attribute.dart';
+import 'package:provider/provider.dart' ;
+class Skill extends Attribute with ChangeNotifier {
 
   String _description;
   int _initial;
@@ -18,6 +20,23 @@ class Skill extends Attribute{
     _professionalPoint = 0;
     _growPoint = 0;
   }
+
+  void changeInterestPoint(int i){
+    _interestPoint = i;
+    notifyListeners();
+  }
+
+  void changeProfessionalPoint(int i){
+    _professionalPoint = i;
+    notifyListeners();
+  }
+
+  void changeGrowPoint(int i){
+    _growPoint = i;
+    notifyListeners();
+  }
+
+
 
   int get interestPoint => _interestPoint;
 

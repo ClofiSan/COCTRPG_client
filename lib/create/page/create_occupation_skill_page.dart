@@ -11,6 +11,8 @@ import 'package:coc_trpg/controller/InvestigatorController.dart';
 import 'package:coc_trpg/create/page/skill_chosen_page.dart';
 import 'package:coc_trpg/controller/SkillController.dart';
 import 'package:coc_trpg/model/SkillType.dart';
+import 'package:coc_trpg/store/CreateInvestigatorStore.dart';
+import 'package:provider/provider.dart';
 class CreateOccupationSkillPage extends StatefulWidget{
   CreateOccupationSkillPage({Key key, this.investigator}): super(key: key);
   final Investigator investigator;
@@ -62,6 +64,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
     occupationList = occupationController.getAllOccupationList();
     skillTypeList = skillController.getAllSkillType();
     allSkill = skillController.getAllSkill();
+    Provider.of<CreateInvestigatorStore>(context,listen: false).changeAllSkill(allSkill);
     currentOccupation = occupationList[0];
     _professionalPoint = getProfessionalPoint();
     _interestingPoint = getInterestingPoint();

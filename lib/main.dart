@@ -2,8 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
 import 'package:coc_trpg/panel/page/role_choose_page.dart';
+import 'package:provider/provider.dart';
+import 'store/CreateInvestigatorStore.dart';
 void main() {
-  runApp(MyApp());
+
+  runApp(
+    MultiProvider(
+      providers:[
+        ChangeNotifierProvider(
+          create: (context)=>CreateInvestigatorStore(),
+        )
+      ],
+
+      child: MyApp(),
+    )
+  );
 }
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

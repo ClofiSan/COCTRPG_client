@@ -1,10 +1,13 @@
+import 'package:flutter/material.dart';
+
 import 'Note.dart';
 import 'Skill.dart';
 import 'Occupation.dart';
 import 'Property.dart';
+import 'SkillType.dart';
 //调查员
 
-class Investigator{
+class Investigator with ChangeNotifier{
   int _HP;
   int _San;
   int _MP;
@@ -29,9 +32,24 @@ class Investigator{
   String _location;
   String _hometown;
 
+  List<SkillType> _allSkill;
 
   List<Note> _noteList = List();
 
+
+  Investigator(){
+    _properties = List();
+    _allSkill = List();
+  }
+
+
+
+
+  List<SkillType> get allSkill => _allSkill;
+
+  set allSkill(List<SkillType> value) {
+    _allSkill = value;
+  }
 
   String get location => _location;
 
