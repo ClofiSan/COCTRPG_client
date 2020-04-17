@@ -35,7 +35,15 @@ class Investigator with ChangeNotifier{
   List<SkillType> _allSkill;
 
   List<Note> _noteList = List();
+  int _interestedPoint ;
+  int _proPoint ;
 
+
+  int get interestedPoint => _interestedPoint;
+
+  set interestedPoint(int value) {
+    _interestedPoint = value;
+  }
 
   Investigator(){
     _properties = List();
@@ -196,6 +204,12 @@ class Investigator with ChangeNotifier{
 
   set hometown(String value) {
     _hometown = value;
+  }
+
+  int get proPoint => _proPoint;
+
+  set proPoint(int value) {
+    _proPoint = value;
   }
 
 

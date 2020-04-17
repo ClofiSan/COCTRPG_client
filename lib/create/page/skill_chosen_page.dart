@@ -30,6 +30,8 @@ class _SkillChosenPage extends State<SkillChosenPage>{
 
   List<SkillType> allSkill = List();
 
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -182,10 +184,8 @@ class _SkillChosenPage extends State<SkillChosenPage>{
                                                 2,
                                                 2
                                             );
-                                            Future.delayed(Duration(seconds: 5), (){
-                                              Navigator.of(context).pop();
-                                              print('延时1s执行');
-                                            });
+                                            pageView = updatePageView();
+                                            Navigator.of(context).pop();
 
                                           },
                                         ),
@@ -232,6 +232,26 @@ class _SkillChosenPage extends State<SkillChosenPage>{
     );
   }
 
+  PageView updatePageView(){
+    return PageView(
+      controller: pageController,
+      children: <Widget>[
+        skillTypeSmallPage(Provider.of<CreateInvestigatorStore>(context,listen: false).investigator.allSkill[0].skillList),
+        skillTypeSmallPage(skillMap[skillTypeList[1]]),
+        skillTypeSmallPage(skillMap[skillTypeList[2]]),
+        skillTypeSmallPage(skillMap[skillTypeList[3]]),
+        skillTypeSmallPage(skillMap[skillTypeList[4]]),
+        skillTypeSmallPage(skillMap[skillTypeList[5]]),
+        skillTypeSmallPage(skillMap[skillTypeList[6]]),
+        skillTypeSmallPage(skillMap[skillTypeList[7]]),
+      ],
+      onPageChanged: (i){
+        setState(() {
+          currentPage = i;
+        });
+      },
+    );
+  }
 
   Widget buildSkillTypeButton(){
     return Container(
@@ -298,7 +318,6 @@ class _SkillChosenPage extends State<SkillChosenPage>{
         width: MediaQuery.of(context).size.width,
         child: Column(
         children: <Widget>[
-          buildSkillTypeButton(),
           buildSkillTableTitle(),
           Container(
             margin: EdgeInsets.fromLTRB(0,0,0,5),

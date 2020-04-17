@@ -11,23 +11,27 @@ class CreateInvestigatorStore with ChangeNotifier{
         if(item.label == skillLabel){
           item.professionalPoint = proPoint;
           item.interestPoint = interestedPoint;
-
           item.growPoint = growPoint;
-          print(22);
-          print(item.growPoint);
-
         }
       }
     }
     notifyListeners();
   }
 
-
+  void setInterestedPoint(int point){
+    _investigator.interestedPoint = point;
+    notifyListeners();
+  }
+  void setProPoint(int point){
+    _investigator.proPoint = point;
+    notifyListeners();
+  }
 
   void changeAllSkill(List<SkillType> allSkills){
     _investigator.allSkill = allSkills;
     notifyListeners();
   }
+
 
 
   CreateInvestigatorStore(){
@@ -38,6 +42,12 @@ class CreateInvestigatorStore with ChangeNotifier{
 
   set investigator(Investigator value) {
     _investigator = value;
+    notifyListeners();
+  }
+  String a = "111";
+
+  void changeA(ss){
+    a = ss;
     notifyListeners();
   }
 

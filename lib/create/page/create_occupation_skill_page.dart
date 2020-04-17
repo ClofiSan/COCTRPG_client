@@ -43,6 +43,269 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
   SkillController skillController;
   OccupationController occupationController ;
 
+  List<Widget> skillTypeWidgetList;
+  Widget currentSkillTypeWidget;
+
+  int tmpInterestedPoint = 0;
+  int tmpProfessionalPoint = 0;
+  int tmpGrowPoint = 0;
+
+  final TextStyle bottomSheetTitleTextStyle = TextStyle(
+      color: Colors.black54,
+      fontSize: 16
+  );
+
+
+  List<Widget> loadSkillTypeWidgetList(List<SkillType> skillTypeList){
+    List<Widget> widgetList = List();
+    for(var skillType in skillTypeList){
+      widgetList.add(loadSkillTypeWidget(skillType.skillList));
+    }
+    return widgetList;
+  }
+
+  InputDecoration buildSkillPointInputDecoration(String hintText){
+    return InputDecoration(
+        hintText: hintText,
+        hintStyle: TextStyle(fontSize: 16,color: Colors.grey),
+        border: InputBorder.none,
+        fillColor: AppTheme.investigatorMinorColor,
+        filled: true,
+        errorStyle: TextStyle(color: Colors.red[600])
+    );
+  }
+
+  bool isValueOrInitial(String pointType){
+    return (pointType == "总值" || pointType == "初始")?true:false;
+  }
+
+  Widget buildSkillPointInputWidget(String pointType,int point,samSkill){
+    return  Container(
+      margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
+      child: Flex(
+        direction: Axis.horizontal,
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: Text(
+              pointType,
+              style: TextStyle(
+                  color: Colors.black54,
+                  fontSize: 16
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Container(
+              width: MediaQuery.of(context).size.width*0.75,
+              height: 30,
+              child: TextField(
+                enabled: !isValueOrInitial(pointType),
+                textAlign: TextAlign.center,
+                decoration:buildSkillPointInputDecoration(point.toString()),
+                onChanged: (v){
+
+                },
+                onSubmitted: (v){
+                  setState(() {
+                    if(pointType == "兴趣"){
+                      print(v);
+                      tmpInterestedPoint = int.parse(v);
+                      samSkill.value += tmpInterestedPoint;
+                      print(samSkill.value);
+                    }else if(pointType == "职业"){
+                      tmpProfessionalPoint = int.parse(v);
+                      samSkill.value += tmpProfessionalPoint ;
+                    }else if(pointType == "总值"){
+
+                    }
+
+                  });
+                },
+              ),
+            ),
+
+          ),
+
+        ],
+      ),
+    );
+  }
+
+  Widget loadSkillTypeWidget(List<Skill> sameSkills){
+    return Container(
+      child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: sameSkills.length,
+          itemBuilder: (BuildContext context,int index){
+            return Container(
+                child:FlatButton(
+                    onPressed: (){
+                      if(sameSkills[index].childSkill.length!=0){
+                      }
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                            return Container(
+                                padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
+                                decoration: BoxDecoration(
+                                  color:Colors.black38,
+//                                    gradient: LinearGradient(
+//                                      colors: [Color(0xFF20BAC1), Colors.grey[600]],
+//                                      begin: Alignment.topCenter,
+//                                      end: Alignment.bottomCenter,
+//                                    )
+                                ),
+                                height: MediaQuery.of(context).size.height*0.8,
+                                child: Form(
+                                    child:Column(
+                                      children: <Widget>[
+                                        Text(sameSkills[index].label,style: TextStyle(fontSize: 20,color: Colors.white),),
+                                        buildSkillPointInputWidget("初始",sameSkills[index].initial,sameSkills[index]),
+                                        buildSkillPointInputWidget("职业",sameSkills[index].professionalPoint,sameSkills[index]),
+                                        buildSkillPointInputWidget("兴趣",sameSkills[index].interestPoint,sameSkills[index]),
+                                        buildSkillPointInputWidget("总值",sameSkills[index].value,sameSkills[index]),
+                                        Container(
+                                          margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
+                                          alignment: Alignment.center,
+                                          child: Flex(
+                                            direction: Axis.horizontal,
+                                            children: <Widget>[
+                                              Expanded(
+                                                flex:1,
+                                                child: Text(
+                                                  "判定",
+                                                  style: bottomSheetTitleTextStyle,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                    "${sameSkills[index].value/1}/${sameSkills[index].value/2}/${sameSkills[index].value/5}",
+                                                    style: TextStyle(color: Colors.white)
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
+                                          alignment: Alignment.center,
+                                          child: Flex(
+                                            direction: Axis.horizontal,
+                                            children: <Widget>[
+                                              Expanded(
+                                                flex:1,
+                                                child: Text(
+                                                  "描述",
+                                                  style: bottomSheetTitleTextStyle,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 2,
+                                                child: Container()
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.all(5),
+                                          child: Wrap(
+                                            children: <Widget>[
+                                              Container(
+                                                alignment: Alignment.centerLeft,
+                                                padding: EdgeInsets.all(10),
+                                                color: AppTheme.investigatorMinorColor,
+                                                child: sameSkills[index].description!=null?
+                                                Text(
+                                                  sameSkills[index].description,
+                                                  style: TextStyle(color: Colors.white),)
+                                                    :Text("无"),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                        Container(
+                                          margin: EdgeInsets.only(top:20),
+                                          child: FlatButton(
+                                            color: AppTheme.investigatorMainColor,
+                                            child: Container(
+                                              child: Text(
+                                                  "确定",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20
+                                                ),
+                                              ),
+                                            ),
+                                            onPressed: (){
+                                              Provider.of<CreateInvestigatorStore>(context,listen: false).changeSkillValue(
+                                                  sameSkills[index].label,
+                                                  tmpProfessionalPoint,
+                                                  tmpInterestedPoint,
+                                                  tmpGrowPoint
+                                              );
+                                              setState((){
+                                                _interestingPoint -= tmpInterestedPoint;
+                                                _professionalPoint -= tmpProfessionalPoint;
+                                                skillTypeWidgetList = loadSkillTypeWidgetList(
+                                                    Provider.of<CreateInvestigatorStore>(context,listen: false).investigator.allSkill
+                                                );
+                                                currentSkillTypeWidget = skillTypeWidgetList[0];
+                                              });
+                                              tmpProfessionalPoint = 0;
+                                              tmpInterestedPoint = 0;
+                                              tmpGrowPoint = 0;
+
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                )
+                            );
+                        },
+                      );
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: Flex(
+                        direction: Axis.horizontal,
+                        children: <Widget>[
+                          Expanded(
+                            flex: 2,
+                            child: Text(sameSkills[index].label,style: TextStyle(color: Colors.white),),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(sameSkills[index].initial.toString(),style: TextStyle(color: Colors.white),),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(sameSkills[index].professionalPoint.toString(),style: TextStyle(color: Colors.white),),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(sameSkills[index].interestPoint.toString(),style: TextStyle(color: Colors.white),),
+                          ),
+                          Expanded(
+                              flex: 1,
+                              child: Text(sameSkills[index].value.toString(),style: TextStyle(color: Colors.white))
+                          )
+                        ],
+                      ),
+                    )
+                )
+            );
+          }
+      ),
+    );
+  }
+
+
   int getProfessionalPoint(){
     int point = 0;
     point = InvestigatorController.getSkillPointByRules(currentOccupation.skillPointRule, widget.investigator);
@@ -62,12 +325,24 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
     await occupationController.loadAllOccupation();
     await skillController.loadSkills(widget.investigator);
     occupationList = occupationController.getAllOccupationList();
+
     skillTypeList = skillController.getAllSkillType();
     allSkill = skillController.getAllSkill();
     Provider.of<CreateInvestigatorStore>(context,listen: false).changeAllSkill(allSkill);
+    skillTypeWidgetList = List();
+    skillTypeWidgetList = loadSkillTypeWidgetList(
+        Provider.of<CreateInvestigatorStore>(context,listen: false).investigator.allSkill
+    );
+    currentSkillTypeWidget = skillTypeWidgetList[0];
     currentOccupation = occupationList[0];
-    _professionalPoint = getProfessionalPoint();
-    _interestingPoint = getInterestingPoint();
+
+    Provider.of<CreateInvestigatorStore>(context,listen: false)
+        .setInterestedPoint(getInterestingPoint());
+    Provider.of<CreateInvestigatorStore>(context,listen: false)
+        .setProPoint(getProfessionalPoint());
+    _professionalPoint = Provider.of<CreateInvestigatorStore>(context,listen: false).investigator.proPoint;
+    _interestingPoint = Provider.of<CreateInvestigatorStore>(context,listen: false).investigator.interestedPoint;
+
   }
 
   @override
@@ -75,6 +350,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
     super.initState();
     _futureBuilderFuture = loadOccupationsAndSkills();
   }
+
 
   Widget buildItemTitleWidget(String title){
     return Container(
@@ -172,6 +448,10 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
     );
   }
 
+  Widget changeSkillTypeWidget(int index){
+    return skillTypeWidgetList[index];
+  }
+
   Widget buildSkillPointRow(){
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -183,7 +463,64 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
       ],
     );
   }
-
+  Widget buildSkillTypeButton(){
+    return Container(
+      margin: EdgeInsets.only(top: 15),
+      color: AppTheme.investigatorMinorColor,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+            children: skillTypeList.map(
+                    (String skillType)=>Container(
+                  child: FlatButton(
+                      onPressed: (){
+                        for(int i=0;i<skillTypeList.length;i++){
+                          if(skillTypeList[i] == skillType){
+                            setState(() {
+                              currentSkillTypeWidget = changeSkillTypeWidget(i);
+                            });
+                          }
+                        }
+                      }, child: Text(skillType,style: TextStyle(fontSize: 16,color: Colors.white),)),
+                )
+            ).toList()
+        ),
+      ),
+    );
+  }
+  Widget buildSkillTableTitle(){
+    return Container(
+      alignment: Alignment.center,
+      margin: EdgeInsets.only(top: 5),
+      padding: EdgeInsets.only(left: 15,right: 15),
+      color: AppTheme.investigatorMinorColor,
+      child: Flex(
+        direction: Axis.horizontal,
+        children: <Widget>[
+          Expanded(
+            flex: 2,
+            child: Text("技能名",style: TextStyle(color: Colors.black)),
+          ),
+          Expanded(
+            flex: 1,
+            child: Text("初始",style: TextStyle(color: Colors.black)),
+          ),
+          Expanded(
+            flex: 1,
+            child: Text("职业",style: TextStyle(color: Colors.black)),
+          ),
+          Expanded(
+            flex: 1,
+            child: Text("兴趣",style: TextStyle(color: Colors.black)),
+          ),
+          Expanded(
+            flex: 1,
+            child: Text("总值",style: TextStyle(color: Colors.black)),
+          ),
+        ],
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -290,12 +627,18 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                       margin: EdgeInsets.only(top: 15),
                       child:buildSkillPointRow(),
                     ),
-
+                    buildSkillTypeButton(),
+                    buildSkillTableTitle(),
                     Container(
-                      constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width
-                      ),
-                      child: SkillChosenPage(allSkill: allSkill,),
+                        margin: EdgeInsets.fromLTRB(0,0,0,5),
+                        width: MediaQuery.of(context).size.width,
+                        constraints: BoxConstraints(
+                          maxHeight: 400,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Color(0x22000000),
+                        ),
+                      child: currentSkillTypeWidget
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 40,bottom: 40),
@@ -303,13 +646,16 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                       child:RaisedButton(
                           padding: EdgeInsets.only(top: 10,bottom: 10),
                           color: Color(0xff20BAC1),
-                          child: Text("添加技能",style: TextStyle(color: Colors.white,fontSize: 22),),
+                          child: Text(
+                            "下一步",
+                            style: TextStyle(color: Colors.white,fontSize: 22),),
                           onPressed: (){
                             currentOccupation = occupationList[_currentOccupationIndex];
                             widget.investigator.occupation = currentOccupation;
                             setState(() {
                               haveOccupation = true;
                             });
+
                           }
                       ),
                     ),
