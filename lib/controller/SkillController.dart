@@ -63,8 +63,6 @@ class SkillController{
             multiSkill.description = skill.description;
 //            multiSkill = skill;
             multiSkill.label += i.toString();
-            print(skill.label);
-            print(multiSkill.label);
             skillList.add(multiSkill);
           }
           skill.label += 1.toString();

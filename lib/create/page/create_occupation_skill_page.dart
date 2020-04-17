@@ -35,6 +35,8 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
 
   int _professionalPoint = 0 ;
   int _interestingPoint = 0;
+  int _sumProPoint = 0;
+  int _sumIntPoint = 0;
 
   bool haveOccupation = false;
 
@@ -49,11 +51,21 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
   int tmpInterestedPoint = 0;
   int tmpProfessionalPoint = 0;
   int tmpGrowPoint = 0;
+  int interestedDiff = 0;
+  int proDiff = 0;
+
+  TextEditingController _interestedController = TextEditingController();
+  TextEditingController _proController = TextEditingController();
+  TextEditingController _initController = TextEditingController();
+  TextEditingController _valController = TextEditingController();
+  GlobalKey<FormState> _formKey= new GlobalKey<FormState>();
 
   final TextStyle bottomSheetTitleTextStyle = TextStyle(
       color: Colors.black54,
       fontSize: 16
   );
+
+
 
 
   List<Widget> loadSkillTypeWidgetList(List<SkillType> skillTypeList){
@@ -78,8 +90,22 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
   bool isValueOrInitial(String pointType){
     return (pointType == "总值" || pointType == "初始")?true:false;
   }
+  TextEditingController getTextEditingController(String pointType){
+    if(pointType == "兴趣"){
+      return _interestedController;
+    }else if(pointType == "职业"){
+     return _proController;
+    }else if(pointType == "总值"){
+      return _valController;
+    }else{
+      return _initController;
+    }
+  }
 
-  Widget buildSkillPointInputWidget(String pointType,int point,samSkill){
+  List<String> _interetPointOnChangValue = List();
+  List<String> _proPointOnChangValue = List();
+
+  Widget buildSkillPointInputWidget(String pointType,int point,Skill samSkill){
     return  Container(
       margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
       child: Flex(
@@ -96,37 +122,40 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
             ),
           ),
           Expanded(
-            flex: 3,
+            flex: 2,
             child: Container(
               width: MediaQuery.of(context).size.width*0.75,
               height: 30,
-              child: TextField(
+              child: TextFormField(
                 enabled: !isValueOrInitial(pointType),
                 textAlign: TextAlign.center,
+                controller: getTextEditingController(pointType),
                 decoration:buildSkillPointInputDecoration(point.toString()),
                 onChanged: (v){
-
-                },
-                onSubmitted: (v){
                   setState(() {
                     if(pointType == "兴趣"){
-                      print(v);
                       tmpInterestedPoint = int.parse(v);
-                      samSkill.value += tmpInterestedPoint;
-                      print(samSkill.value);
+                      interestedDiff = tmpInterestedPoint - samSkill.interestPoint;
                     }else if(pointType == "职业"){
                       tmpProfessionalPoint = int.parse(v);
-                      samSkill.value += tmpProfessionalPoint ;
+                      proDiff = tmpProfessionalPoint - samSkill.professionalPoint;
                     }else if(pointType == "总值"){
 
                     }
+                    samSkill.value = samSkill.initial + tmpProfessionalPoint + tmpInterestedPoint;
 
                   });
+
                 },
+                onSaved: (v){
+
+                },
+
               ),
             ),
 
           ),
+
 
         ],
       ),
@@ -159,6 +188,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                                 ),
                                 height: MediaQuery.of(context).size.height*0.8,
                                 child: Form(
+                                  key: _formKey,
                                     child:Column(
                                       children: <Widget>[
                                         Text(sameSkills[index].label,style: TextStyle(fontSize: 20,color: Colors.white),),
@@ -181,10 +211,13 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                                               ),
                                               Expanded(
                                                 flex: 2,
-                                                child: Text(
-                                                    "${sameSkills[index].value/1}/${sameSkills[index].value/2}/${sameSkills[index].value/5}",
-                                                    style: TextStyle(color: Colors.white)
-                                                ),
+                                                child: Container(
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                      "${sameSkills[index].value~/1} / ${sameSkills[index].value~/2} / ${sameSkills[index].value~/5}",
+                                                      style: TextStyle(fontSize:16,color: Colors.white)
+                                                  ),
+                                                )
                                               ),
                                             ],
                                           ),
@@ -248,8 +281,8 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                                                   tmpGrowPoint
                                               );
                                               setState((){
-                                                _interestingPoint -= tmpInterestedPoint;
-                                                _professionalPoint -= tmpProfessionalPoint;
+                                                _interestingPoint -= interestedDiff;
+                                                _professionalPoint -= proDiff;
                                                 skillTypeWidgetList = loadSkillTypeWidgetList(
                                                     Provider.of<CreateInvestigatorStore>(context,listen: false).investigator.allSkill
                                                 );
@@ -336,6 +369,8 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
     currentSkillTypeWidget = skillTypeWidgetList[0];
     currentOccupation = occupationList[0];
 
+    _sumIntPoint = getInterestingPoint();
+    _sumProPoint = getProfessionalPoint();
     Provider.of<CreateInvestigatorStore>(context,listen: false)
         .setInterestedPoint(getInterestingPoint());
     Provider.of<CreateInvestigatorStore>(context,listen: false)
@@ -457,12 +492,25 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        buildSkillPointWidget("职业点数", _professionalPoint),
-        buildSkillPointWidget("兴趣点数", _interestingPoint),
-        buildSkillPointWidget("总点数", _interestingPoint+_professionalPoint),
+        buildSkillPointWidget("职业剩余", _professionalPoint),
+        buildSkillPointWidget("兴趣剩余", _interestingPoint),
+        buildSkillPointWidget("总剩余", _interestingPoint+_professionalPoint),
       ],
     );
   }
+
+  Widget buildSumSkillPoint(){
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        buildSkillPointWidget("职业点数", _sumProPoint),
+        buildSkillPointWidget("兴趣点数", _sumIntPoint),
+        buildSkillPointWidget("总点数", _sumProPoint+_sumIntPoint),
+      ],
+    );
+  }
+
   Widget buildSkillTypeButton(){
     return Container(
       margin: EdgeInsets.only(top: 15),
@@ -623,6 +671,10 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                     buildItemTitleWidget("技能点"),
                     buildContentContainer(buildSkillPointRule(occupationList[_currentOccupationIndex].skillPointRule)),
                     buildItemTitleWidget("技能选择"),
+                    Container(
+                      margin: EdgeInsets.only(top: 15),
+                      child:buildSumSkillPoint(),
+                    ),
                     Container(
                       margin: EdgeInsets.only(top: 15),
                       child:buildSkillPointRow(),
