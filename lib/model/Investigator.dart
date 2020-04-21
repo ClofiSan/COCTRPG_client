@@ -5,6 +5,7 @@ import 'Skill.dart';
 import 'Occupation.dart';
 import 'Property.dart';
 import 'SkillType.dart';
+import 'Weapon.dart';
 //调查员
 
 class Investigator with ChangeNotifier{
@@ -23,7 +24,7 @@ class Investigator with ChangeNotifier{
   List<Skill> _skills;
   String _background;
   String _imageUrl;
-  String _equipment;
+
   String _international;
   String _language;
   String _foreignName ;
@@ -38,8 +39,18 @@ class Investigator with ChangeNotifier{
   int _interestedPoint ;
   int _proPoint ;
 
+  List<String> _equitpments;
+  List<Weapon> _weaponList;
+
+
+  List<String> get equitpments => _equitpments;
+
+  set equitpments(List<String> value) {
+    _equitpments = value;
+  }
 
   int get interestedPoint => _interestedPoint;
+
 
   set interestedPoint(int value) {
     _interestedPoint = value;
@@ -98,12 +109,6 @@ class Investigator with ChangeNotifier{
     _noteList = value;
   }
 
-  String get equipment => _equipment;
-
-  set equipment(String value) {
-    _equipment = value;
-  }
-
   Occupation get occupation => _occupation;
 
   set occupation(Occupation value) {
@@ -118,7 +123,7 @@ class Investigator with ChangeNotifier{
 
   @override
   String toString() {
-    return 'Investigator{_id: $_id, _name: $_name, _age: $_age, _occupation: $_occupation, _properties: $_properties, _skills: $_skills, _background: $_background, _imageUrl: $_imageUrl, _equipment: $_equipment}';
+    return 'Investigator{_id: $_id, _name: $_name, _age: $_age, _occupation: $_occupation, _properties: $_properties, _skills: $_skills, _background: $_background, _imageUrl: $_imageUrl}';
   }
 
   int get id => _id;
@@ -210,6 +215,12 @@ class Investigator with ChangeNotifier{
 
   set proPoint(int value) {
     _proPoint = value;
+  }
+
+  List<Weapon> get weaponList => _weaponList;
+
+  set weaponList(List<Weapon> value) {
+    _weaponList = value;
   }
 
 

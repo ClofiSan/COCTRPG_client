@@ -8,11 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:coc_trpg/create/page/skill_point_page.dart';
 import 'package:coc_trpg/controller/OccupationController.dart';
 import 'package:coc_trpg/controller/InvestigatorController.dart';
-import 'package:coc_trpg/create/page/skill_chosen_page.dart';
+
 import 'package:coc_trpg/controller/SkillController.dart';
 import 'package:coc_trpg/model/SkillType.dart';
 import 'package:coc_trpg/store/CreateInvestigatorStore.dart';
 import 'package:provider/provider.dart';
+import 'equipment_setting_page.dart';
 class CreateOccupationSkillPage extends StatefulWidget{
   CreateOccupationSkillPage({Key key, this.investigator}): super(key: key);
   final Investigator investigator;
@@ -102,8 +103,6 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
     }
   }
 
-  List<String> _interetPointOnChangValue = List();
-  List<String> _proPointOnChangValue = List();
 
   Widget buildSkillPointInputWidget(String pointType,int point,Skill samSkill){
     return  Container(
@@ -702,11 +701,17 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                             "下一步",
                             style: TextStyle(color: Colors.white,fontSize: 22),),
                           onPressed: (){
-                            currentOccupation = occupationList[_currentOccupationIndex];
-                            widget.investigator.occupation = currentOccupation;
-                            setState(() {
-                              haveOccupation = true;
-                            });
+//                            currentOccupation = occupationList[_currentOccupationIndex];
+//                            widget.investigator.occupation = currentOccupation;
+//                            setState(() {
+//                              haveOccupation = true;
+//                            });
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>EquipmentSettingPage()
+                                )
+                            );
 
                           }
                       ),

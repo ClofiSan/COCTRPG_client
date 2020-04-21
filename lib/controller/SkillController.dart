@@ -9,7 +9,7 @@ import 'package:coc_trpg/model/Investigator.dart';
 import 'package:coc_trpg/controller/InvestigatorController.dart';
 class SkillController{
 
-  List<String> _skillTypeList = ["交际类","移动类","隐秘类","学问类","调查类","医疗类","战斗类别","职业技能类"];
+  final List<String> _skillTypeList = ["交际类","移动类","隐秘类","学问类","调查类","医疗类","战斗类别","职业技能类"];
   List<SkillType> _allSkill ;
 
   SkillController(){

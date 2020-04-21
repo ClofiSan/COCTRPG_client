@@ -69,6 +69,7 @@ flutter:
     - assets/occupations.yaml
     - assets/skills.json
     - assets/NewSkills.json
+    - assets/weapons.json
     - assets/skills.yaml
     - assets/icon/function_icon/notebook.png
     - assets/icon/function_icon/document.png
