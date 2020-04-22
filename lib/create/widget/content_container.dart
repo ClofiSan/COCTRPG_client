@@ -17,7 +17,6 @@ class _ContentContainer extends State<ContentContainer>{
     // TODO: implement build
     return Container(
         margin: EdgeInsets.only(top: 15),
-        padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
         color: AppTheme.investigatorMinorColor,
         constraints: BoxConstraints(
             minWidth: MediaQuery.of(context).size.width

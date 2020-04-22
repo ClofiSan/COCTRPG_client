@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:coc_trpg/create/widget/create_item_title_widget.dart';
 import 'package:coc_trpg/create/widget/content_container.dart';
 import 'package:coc_trpg/AppThemeData.dart';
+import 'package:coc_trpg/create/widget/next_step_button.dart';
 class EquipmentSettingPage extends StatefulWidget{
   EquipmentSettingPage({Key key}): super(key: key);
 
@@ -41,7 +42,9 @@ class _EquipmentSettingPage extends State<EquipmentSettingPage>{
     _weaponTypeList = _weaponController.getWeaponType();
     _bottomSheetWeapon = _weaponMap["常规武器"][0];
     chosenWeaponList = loadChosenWeaponList();
-    _investigator = Provider.of<CreateInvestigatorStore>(context,listen: false).investigator;
+    _investigator = Provider
+        .of<CreateInvestigatorStore>(context,listen: false)
+        .investigator;
 
   }
 
@@ -50,7 +53,7 @@ class _EquipmentSettingPage extends State<EquipmentSettingPage>{
     List<Weapon> list = List();
     for(int i=0;i<_weaponTypeList.length;i++){
       Weapon weapon = Weapon();
-      weapon.name = _weaponTypeList[i];
+      weapon.name = "---"+_weaponTypeList[i]+"---";
       list.add(weapon);
       for(var item in _weaponMap[_weaponTypeList[i]]){
         list.add(item);
@@ -72,10 +75,12 @@ class _EquipmentSettingPage extends State<EquipmentSettingPage>{
           return AlertDialog(
             backgroundColor: AppTheme.investigatorMinorColor,
             title: Text("输入装备信息",style: AppTheme.dialogTextStyle,),
-            content: Container(
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: equipName,
+            content:
+               TextField(
+                autofocus: true,
+                 decoration: InputDecoration(
+
+                    hintText: equipName,
                   hintStyle: TextStyle(
                     color: Colors.grey[500],
                     fontSize: 18,
@@ -86,7 +91,6 @@ class _EquipmentSettingPage extends State<EquipmentSettingPage>{
                   _newEquipment = v;
                 },
               ),
-            ),
             actions: <Widget>[
               FlatButton(
                 child: Text(
@@ -112,12 +116,10 @@ class _EquipmentSettingPage extends State<EquipmentSettingPage>{
           return AlertDialog(
             backgroundColor: AppTheme.investigatorMinorColor,
             title: Text("删除装备",style: AppTheme.dialogTextStyle,),
-            content: Container(
-              alignment: Alignment.centerLeft,
-              child: Text(
+            content:
+              Text(
                 "你确定删除 ${_equipmentSettingList[index]}?",
                 style: AppTheme.dialogTextStyle,),
-            ),
             actions: <Widget>[
               FlatButton(
                 child: Text(
@@ -178,20 +180,23 @@ class _EquipmentSettingPage extends State<EquipmentSettingPage>{
 
 
   showWeaponBottomSheet(Weapon weapon){
-    var _height = MediaQuery.of(context).size.height*0.8;
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context){
           return Container(
             padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
-            height: _height,
+            color: Colors.black38,
             child: Column(
               children: <Widget>[
-                FlatButton(
-                  child:Text(_bottomSheetWeapon.name,style: TextStyle(fontSize: 20,color: Colors.black38),),
-                  onPressed: (){
-                    showWeaponChosenDialog();
-                  }
+                Container(
+                  margin: EdgeInsets.all(10),
+                  child:Text(
+                      weapon.name,
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.white,
+                      )
+                  ),
                 ),
                 buildWeaponValueText("使用技能", _bottomSheetWeapon.relevantSkill),
                 buildWeaponValueText("伤害", _bottomSheetWeapon.damage),
@@ -201,10 +206,6 @@ class _EquipmentSettingPage extends State<EquipmentSettingPage>{
                 buildWeaponValueText("故障值", _bottomSheetWeapon.breakdown),
                 buildWeaponValueText("年代", _bottomSheetWeapon.time),
                 buildWeaponValueText("价格", _bottomSheetWeapon.price),
-                Container(
-                  margin: EdgeInsets.only(top: 20),
-                  child: buildWeaponConfirmButton(_bottomSheetWeapon),
-                )
               ],
             ),
           );
@@ -222,9 +223,8 @@ class _EquipmentSettingPage extends State<EquipmentSettingPage>{
             title: Text("添加武器",style: AppTheme.dialogTextStyle,),
             content: Container(
               alignment: Alignment.centerLeft,
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.height*0.5
-              ),
+              width: MediaQuery.of(context).size.width * 0.6,
+              height: MediaQuery.of(context).size.height * 0.6,
               child: ListView.builder(
                 itemCount: chosenWeaponList.length,
                   shrinkWrap: true,
@@ -232,7 +232,7 @@ class _EquipmentSettingPage extends State<EquipmentSettingPage>{
                    return FlatButton(
                      onPressed: (){
                        setState(() {
-                         _bottomSheetWeapon = chosenWeaponList[index];
+                         _investigatorWeaponList.add(chosenWeaponList[index]);
                          Navigator.of(context).pop();
                        });
 
@@ -279,17 +279,17 @@ class _EquipmentSettingPage extends State<EquipmentSettingPage>{
           child:Text(
             attributeName,
             style: TextStyle(
-                color: Colors.black54,
+                color: Colors.white,
                 fontSize: 16
             ),
           ) ,
         ),
         value != null?Expanded(
-          flex: 2,
+          flex: 1,
           child:Text(
             value,
             style: TextStyle(
-                color: Colors.black54,
+                color: Colors.white,
                 fontSize: 16
             ),
           ) ,
@@ -305,7 +305,7 @@ class _EquipmentSettingPage extends State<EquipmentSettingPage>{
       color: AppTheme.investigatorMainColor,
       child: Icon(Icons.add,color: Colors.white,),
       onPressed: (){
-        showWeaponBottomSheet(_bottomSheetWeapon);
+        showWeaponChosenDialog();
       },
     );
   }
@@ -343,6 +343,41 @@ class _EquipmentSettingPage extends State<EquipmentSettingPage>{
     );
   }
 
+  showWeaponDeleteDialog(index){
+    showDialog(
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            backgroundColor: AppTheme.investigatorMinorColor,
+            title: Text("删除武器",style: AppTheme.dialogTextStyle,),
+            content: Container(
+              alignment: Alignment.centerLeft,
+              width: MediaQuery.of(context).size.width * 0.1,
+              height: MediaQuery.of(context).size.height * 0.1,
+              child: Text(
+                "你确定删除 ${_investigatorWeaponList[index].name}?",
+                style: AppTheme.dialogTextStyle,),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(
+                  "确定",
+                  style: AppTheme.dialogTextStyle,
+                ),
+                onPressed: (){
+                  setState(() {
+                    _investigatorWeaponList.removeAt(index);
+                    Navigator.of(context).pop();
+                  });
+                },
+              )
+            ],
+          );
+        }
+    );
+  }
+
+
   Widget buildWeaponList(){
     return Container(
       margin: EdgeInsets.only(top: 5),
@@ -355,18 +390,19 @@ class _EquipmentSettingPage extends State<EquipmentSettingPage>{
             }
             return ContentContainer(
                 widget:FlatButton(
-                    onLongPress: (){
+                      onLongPress: (){
+                        showWeaponDeleteDialog(index);
+                      },
+                      onPressed: (){
+                        _bottomSheetWeapon = _investigatorWeaponList[index];
+                        showWeaponBottomSheet(_bottomSheetWeapon);
+                      },
+                      child: Text(
+                        _investigatorWeaponList[index].name,
+                        style:AppTheme.createMinorColorBoxDescribeTextStyle ,
+                      )
+                  ),
 
-                    },
-                    onPressed: (){
-                      _bottomSheetWeapon = _investigatorWeaponList[index];
-                      showWeaponBottomSheet(_bottomSheetWeapon);
-                    },
-                    child: Text(
-                      _investigatorWeaponList[index].name,
-                      style:AppTheme.createMinorColorBoxDescribeTextStyle ,
-                    )
-                )
             );
           }
       ),
@@ -398,6 +434,23 @@ class _EquipmentSettingPage extends State<EquipmentSettingPage>{
                   buildEquipmentList(),
                   CreateItemTitleWidget(title: "武器",),
                   buildWeaponList(),
+                  NextStepButton(
+                    text: "下一步",
+                    onPressFunction: (){
+//                      Navigator.push(
+//                          context,
+//                          MaterialPageRoute(
+//                              builder: (BuildContext context) =>EquipmentSettingPage()
+//                          )
+//                      );
+                      _investigator.weaponList = _investigatorWeaponList;
+                      _investigator.equitpments = _equipmentSettingList;
+                      Provider
+                          .of<CreateInvestigatorStore>(context,listen: false)
+                          .investigator = _investigator;
+                      
+                    },
+                  )
                 ],
               ),
             ),
