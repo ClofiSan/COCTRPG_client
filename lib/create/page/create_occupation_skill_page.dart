@@ -8,12 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:coc_trpg/create/page/skill_point_page.dart';
 import 'package:coc_trpg/controller/OccupationController.dart';
 import 'package:coc_trpg/controller/InvestigatorController.dart';
-
+import '../widget/normal_input_field.dart';
 import 'package:coc_trpg/controller/SkillController.dart';
 import 'package:coc_trpg/model/SkillType.dart';
 import 'package:coc_trpg/store/CreateInvestigatorStore.dart';
 import 'package:provider/provider.dart';
 import 'equipment_setting_page.dart';
+import 'package:coc_trpg/model/Credit.dart';
 class CreateOccupationSkillPage extends StatefulWidget{
   CreateOccupationSkillPage({Key key, this.investigator}): super(key: key);
   final Investigator investigator;
@@ -32,6 +33,9 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
   Map<String,dynamic> skillMap = Map();
   List<SkillType> allSkill = List();
 
+  String assetsDescription;
+
+
   int _currentOccupationIndex = 0;
 
   int _professionalPoint = 0 ;
@@ -45,6 +49,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
 
   SkillController skillController;
   OccupationController occupationController ;
+  InvestigatorController investigatorController;
 
   List<Widget> skillTypeWidgetList;
   Widget currentSkillTypeWidget;
@@ -59,13 +64,16 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
   TextEditingController _proController = TextEditingController();
   TextEditingController _initController = TextEditingController();
   TextEditingController _valController = TextEditingController();
-  GlobalKey<FormState> _formKey= new GlobalKey<FormState>();
+  GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
   final TextStyle bottomSheetTitleTextStyle = TextStyle(
       color: Colors.black54,
       fontSize: 16
   );
 
+  int creditPoint;
+  Credit credit;
+  Investigator investigator;
 
 
 
@@ -142,11 +150,14 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
 
                     }
                     samSkill.value = samSkill.initial + tmpProfessionalPoint + tmpInterestedPoint;
-
+                    if(samSkill.label == "信用评级"){
+                      creditPoint = samSkill.value;
+                      credit = investigatorController.getCredit(creditPoint);
+                      Provider
+                          .of<CreateInvestigatorStore>(context,listen: false)
+                          .investigator.credit = credit;
+                    }
                   });
-
-                },
-                onSaved: (v){
 
                 },
 
@@ -187,7 +198,6 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                                 ),
                                 height: MediaQuery.of(context).size.height*0.8,
                                 child: Form(
-                                  key: _formKey,
                                     child:Column(
                                       children: <Widget>[
                                         Text(sameSkills[index].label,style: TextStyle(fontSize: 20,color: Colors.white),),
@@ -290,7 +300,6 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                                               tmpProfessionalPoint = 0;
                                               tmpInterestedPoint = 0;
                                               tmpGrowPoint = 0;
-
                                               Navigator.of(context).pop();
                                             },
                                           ),
@@ -354,12 +363,16 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
   Future loadOccupationsAndSkills() async{
     skillController = SkillController();
     occupationController = OccupationController();
+    investigatorController = InvestigatorController();
+    credit = Credit();
     await occupationController.loadAllOccupation();
     await skillController.loadSkills(widget.investigator);
+    creditPoint = skillController.getCreditPoint();
+    Provider.of<CreateInvestigatorStore>(context,listen: false).investigator.credit = credit;
     occupationList = occupationController.getAllOccupationList();
-
     skillTypeList = skillController.getAllSkillType();
     allSkill = skillController.getAllSkill();
+    credit = investigatorController.getCredit(creditPoint);
     Provider.of<CreateInvestigatorStore>(context,listen: false).changeAllSkill(allSkill);
     skillTypeWidgetList = List();
     skillTypeWidgetList = loadSkillTypeWidgetList(
@@ -377,6 +390,9 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
     _professionalPoint = Provider.of<CreateInvestigatorStore>(context,listen: false).investigator.proPoint;
     _interestingPoint = Provider.of<CreateInvestigatorStore>(context,listen: false).investigator.interestedPoint;
 
+    investigator =
+        Provider.of<CreateInvestigatorStore>(context,listen: false).investigator;
+    print(credit.toString());
   }
 
   @override
@@ -568,6 +584,109 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
       ),
     );
   }
+  final TextStyle creditItemTextStyle = TextStyle(
+    fontSize: 15,
+    color: Colors.white
+  );
+  Widget buildCreditItemContainer(String label,String value){
+    return Flex(
+      direction: Axis.horizontal,
+      children: <Widget>[
+        Expanded(
+          flex: 1,
+          child: Text(
+            label,
+            style: creditItemTextStyle,
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: Text(
+            value,
+            style: creditItemTextStyle,
+          ),
+        )
+      ],
+    );
+  }
+  Widget buildCreditRowContainer(List<String> credits,List<String> value){
+    return Container(
+      margin: EdgeInsets.fromLTRB(5, 10, 5, 5),
+      child: Flex(
+        direction: Axis.horizontal,
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: buildCreditItemContainer(
+              credits[0],
+              value[0]
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: buildCreditItemContainer(
+                credits[1],
+                value[1]
+            ),
+          )
+        ],
+      ),
+    );
+  }
+  TextEditingController assetsDescriptionController = TextEditingController();
+  Widget buildCreditContainer(){
+    List<Widget> list = List();
+    list.add(buildCreditRowContainer(
+        ["信用评级:","生活水平:"],
+        [credit.creditPoint.toString(),credit.livingStandard]
+    ));
+    list.add(buildCreditRowContainer(
+        ["现金:","消费水平:"],
+        [credit.cash,credit.consumptionLevel]
+    ));
+    list.add(
+      Container(
+        child: Column(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.all(5),
+              child: Text(
+                  "资产说明",
+                style: TextStyle(
+                  fontSize: 18
+                ),
+              ),
+            ),
+            Container(
+              child: Form(
+                key: _formKey,
+                  child:NormalInputField(
+                    controller: assetsDescriptionController,
+                    hintText: "",
+                    maxLine: 3,
+                    validatorFunction: (v){
+                      assetsDescription = v;
+                    },
+                    onSavedFunction: (v){
+                      assetsDescription = v;
+                    },
+                  ),
+              )
+            )
+          ],
+        ),
+      )
+    );
+    return Container(
+      child: Column(
+        children: list
+      ),
+    );
+
+  }
+  
+
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -691,6 +810,8 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                         ),
                       child: currentSkillTypeWidget
                     ),
+                    buildItemTitleWidget("资产情况"),
+                    buildCreditContainer(),
                     Container(
                       margin: EdgeInsets.only(top: 40,bottom: 40),
                       width: MediaQuery.of(context).size.width,
@@ -706,6 +827,14 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
 //                            setState(() {
 //                              haveOccupation = true;
 //                            });
+
+                          if(_formKey.currentState.validate()){
+                            _formKey.currentState.save();
+                            Provider
+                                .of<CreateInvestigatorStore>(context,listen: false)
+                                .investigator.credit.assetsDescription = assetsDescription;
+                          }
+
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(

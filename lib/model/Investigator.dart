@@ -7,6 +7,7 @@ import 'Property.dart';
 import 'SkillType.dart';
 import 'Weapon.dart';
 import 'BackgroundStory.dart';
+import 'Credit.dart';
 //调查员
 
 class Investigator with ChangeNotifier{
@@ -45,6 +46,14 @@ class Investigator with ChangeNotifier{
 
   BackgroundStory _backgroundStory;
 
+  Credit _credit;
+
+
+  Credit get credit => _credit;
+
+  set credit(Credit value) {
+    _credit = value;
+  }
 
   BackgroundStory get backgroundStory => _backgroundStory;
 

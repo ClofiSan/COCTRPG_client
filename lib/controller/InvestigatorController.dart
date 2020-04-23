@@ -1,8 +1,88 @@
 import 'package:coc_trpg/model/Investigator.dart';
 import 'package:coc_trpg/model/Property.dart';
 import 'dart:math' as Math;
+import 'package:coc_trpg/model/Credit.dart';
 
 class InvestigatorController{
+
+
+  final Map<List<int>,dynamic> recentTimeCreditMap = {
+    [0,0]:{
+      "livingStandard":"身无分文",
+      "cash":"\$0.5",
+      "otherAssets":"没有",
+      "consumptionLevel":"\$0.5",
+    },
+    [1,9]:{
+      "livingStandard":"贫穷",
+      "cash":"\$1-9 CR*1",
+      "otherAssets":"\$10-90 CR*10",
+      "consumptionLevel":"\$2",
+    },
+    [10,49]:{
+      "livingStandard":"标准",
+      "cash":"\$20-98 CR*2",
+      "otherAssets":"\$500-2450 CR*50",
+      "consumptionLevel":"\$10",
+    },
+    [50,89]:{
+      "livingStandard":"小康",
+      "cash":"\$250-445 CR*5",
+      "otherAssets":"\$25000-44500\nCR*500",
+      "consumptionLevel":"\$50",
+    },
+    [90,98]:{
+      "livingStandard":"富裕",
+      "cash":"\$1800-1960\nCR*20",
+      "otherAssets":"\$180000-196000\nCR*2000",
+      "consumptionLevel":"\$250",
+    },
+    [99,99]:{
+      "livingStandard":"富豪",
+      "cash":"\$50000",
+      "otherAssets":"\$5M+",
+      "consumptionLevel":"\$5000",
+    }
+  };
+  final Map<List<int>,dynamic> modernTimeCreditMap = {
+    [0,0]:{
+      "livingStandard":"身无分文",
+      "cash":"\$10",
+      "otherAssets":"没有",
+      "consumptionLevel":"\$10",
+    },
+    [1,9]:{
+      "livingStandard":"贫穷",
+      "cash":"\$20-180\nCR*20",
+      "otherAssets":"\$20-1800\nCR*20",
+      "consumptionLevel":"\$40",
+    },
+    [10,49]:{
+      "livingStandard":"标准",
+      "cash":"\$400-1960\nCR*40",
+      "otherAssets":"\$10000-49000\nCR*1000",
+      "consumptionLevel":"\$200",
+    },
+    [50,89]:{
+      "livingStandard":"小康",
+      "cash":"\$5000-8900 CR*100",
+      "otherAssets":"\$50000-890000\nCR*1000",
+      "consumptionLevel":"\$1000",
+    },
+    [90,98]:{
+      "livingStandard":"富裕",
+      "cash":"\$36000-39200\nCR*400",
+      "otherAssets":"\$3.6M-3.92M\nCR*40000",
+      "consumptionLevel":"\$5000",
+    },
+    [99,99]:{
+      "livingStandard":"富豪",
+      "cash":"\$1M",
+      "otherAssets":"\$100M+",
+      "consumptionLevel":"\$1000000",
+    }
+  };
+
 
   static List<String> propertyList = [
     "STR",
@@ -88,6 +168,26 @@ class InvestigatorController{
     "远未来",
     "其他"
   ];
+  Credit getCredit(int point,{bool isModern = false}){
+    var map = Map();
+    Credit credit = Credit();
+    if(isModern){
+      map = modernTimeCreditMap;
+    }else{
+      map = recentTimeCreditMap;
+    }
+    for(var key in map.keys){
+      if(point <= key[1]){
+        credit.cash = map[key]["cash"];
+        credit.consumptionLevel = map[key]["consumptionLevel"];
+        credit.creditPoint = point;
+        credit.livingStandard = map[key]["livingStandard"];
+        credit.otherAssets = map[key]["otherAssets"];
+        break;
+      }
+    }
+    return credit;
+  }
 
   static int getInvestigatorMov(List<Property> propertyList){
     int dex = 0;
@@ -123,11 +223,13 @@ class InvestigatorController{
     }
     int physique = 2;
     for(int i=0;i<physiqueMap.length;i++){
-      if(sum < physiqueMap[i][0]){
+      if(sum <= physiqueMap[i][1]){
         physique = i;
         break;
       }
     }
+    print(physique);
+    print(iPhysiqueMap[physique]);
     return iPhysiqueMap[physique];
   }
 
@@ -135,6 +237,9 @@ class InvestigatorController{
   static int getInvestigatorPropertySum(List<Property> propertyList){
     int sum = 0;
     for(var item in propertyList){
+      if(item.name == "LUC"){
+        continue;
+      }
       sum += item.value;
     }
     return sum;
@@ -161,7 +266,10 @@ class InvestigatorController{
       sumRollPoint += 6;
     }
     for(int i=0;i < round;i++){
-      int rollPoint = Math.Random().nextInt(6);
+      int rollPoint = 0;
+      while(rollPoint<=1){
+        rollPoint = Math.Random().nextInt(6);
+      }
       sumRollPoint += rollPoint;
     }
 

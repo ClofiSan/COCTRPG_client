@@ -48,7 +48,6 @@ class _AutoRollAttrPage extends State<AutoRollAttrPage>{
     resetPropertyGroup();
     propertyPage = RandomPropertyPage(propertyList: property);
     otherPropertyView = buildOtherProperty();
-    propertySumView = buildSumAttriWigdet(property);
     super.initState();
   }
 
@@ -114,16 +113,8 @@ class _AutoRollAttrPage extends State<AutoRollAttrPage>{
     );
   }
 
-  Widget buildSumAttriWigdet(List<Property> propertyList){
-    return Container(
-      margin: EdgeInsets.only(top: 5),
-      alignment: Alignment.center,
-      child: Text(
-          "总点数 ${InvestigatorController.getInvestigatorPropertySum(propertyList)}",
-        style: TextStyle(color: Colors.black,fontSize: 20),
-      ),
-    );
-  }
+
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -167,12 +158,11 @@ class _AutoRollAttrPage extends State<AutoRollAttrPage>{
                 ),
               ),
               buildOtherProperty(),
-              buildSumAttriWigdet(property),
               Container(
                 padding: EdgeInsets.only(left: 30,right: 30),
                 margin: EdgeInsets.fromLTRB(30,10,30,5),
                 constraints: BoxConstraints(
-                    maxHeight: 300,
+                    maxHeight: 350,
                     maxWidth: 300
                 ),
                 child:propertyPage,
@@ -198,7 +188,6 @@ class _AutoRollAttrPage extends State<AutoRollAttrPage>{
                           setState(() {
                             propertyPage = RandomPropertyPage(propertyList: property);
                             otherPropertyView = buildOtherProperty();
-                            propertySumView = buildSumAttriWigdet(property);
                           });
                         },
                       ),
@@ -215,6 +204,8 @@ class _AutoRollAttrPage extends State<AutoRollAttrPage>{
                           investigator.HP = InvestigatorController.getInvestigatorHP(property);
                           investigator.San = InvestigatorController.getInvestigatorSan(property);
                           investigator.MP = InvestigatorController.getInvestigatorMP(property);
+                          investigator.dmagePlus = damagePlus;
+                          investigator.Phy = phyi;
                           Provider.of<CreateInvestigatorStore>(context,listen: false).investigator = investigator;
                           Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) =>InterestPointPage(investigator: investigator,)));
                         },

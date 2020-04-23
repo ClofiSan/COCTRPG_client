@@ -11,6 +11,7 @@ class SkillController{
 
   final List<String> _skillTypeList = ["交际类","移动类","隐秘类","学问类","调查类","医疗类","战斗类别","职业技能类"];
   List<SkillType> _allSkill ;
+  int _creditPoint;
 
   SkillController(){
     _allSkill = List();
@@ -67,6 +68,9 @@ class SkillController{
           }
           skill.label += 1.toString();
         }
+        if(skill.label == "信用评级"){
+          _creditPoint = skill.value;
+        }
       }
       skillType.skillList = skillList;
       _allSkill.add(skillType);
@@ -82,6 +86,10 @@ class SkillController{
   }
   getAllSkillType(){
     return _skillTypeList;
+  }
+
+  getCreditPoint(){
+    return _creditPoint;
   }
 
 
