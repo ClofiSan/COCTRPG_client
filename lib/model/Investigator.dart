@@ -6,6 +6,7 @@ import 'Occupation.dart';
 import 'Property.dart';
 import 'SkillType.dart';
 import 'Weapon.dart';
+import 'BackgroundStory.dart';
 //调查员
 
 class Investigator with ChangeNotifier{
@@ -42,6 +43,14 @@ class Investigator with ChangeNotifier{
   List<String> _equitpments;
   List<Weapon> _weaponList;
 
+  BackgroundStory _backgroundStory;
+
+
+  BackgroundStory get backgroundStory => _backgroundStory;
+
+  set backgroundStory(BackgroundStory value) {
+    _backgroundStory = value;
+  }
 
   List<String> get equitpments => _equitpments;
 

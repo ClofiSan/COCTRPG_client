@@ -15,7 +15,7 @@ class NextStepButton extends StatelessWidget{
           padding: EdgeInsets.only(top: 10,bottom: 10),
           color: Color(0xff20BAC1),
           child: Text(
-            "下一步",
+            text,
             style: TextStyle(color: Colors.white,fontSize: 22),),
           onPressed: onPressFunction
       ),

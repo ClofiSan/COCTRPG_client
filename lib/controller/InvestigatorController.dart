@@ -59,6 +59,16 @@ class InvestigatorController{
     1:'+1D4',
     2:'+1D6'
   };
+  static final List<String> backgroundStoryList = [
+    "个人描述",
+    "思想/信念",
+    "重要之人",
+    "意义非凡之地",
+    "宝贵之物",
+    "特点",
+    "伤口/疤痕",
+    "恐惧症/狂躁症"
+  ];
 
   static final List<String> timeDescription = [
     "1820 ~ 1920",

@@ -9,6 +9,7 @@ import 'package:coc_trpg/create/widget/create_item_title_widget.dart';
 import 'package:coc_trpg/create/widget/content_container.dart';
 import 'package:coc_trpg/AppThemeData.dart';
 import 'package:coc_trpg/create/widget/next_step_button.dart';
+import 'background_story_page.dart';
 class EquipmentSettingPage extends StatefulWidget{
   EquipmentSettingPage({Key key}): super(key: key);
 
@@ -45,7 +46,6 @@ class _EquipmentSettingPage extends State<EquipmentSettingPage>{
     _investigator = Provider
         .of<CreateInvestigatorStore>(context,listen: false)
         .investigator;
-
   }
 
 
@@ -437,18 +437,18 @@ class _EquipmentSettingPage extends State<EquipmentSettingPage>{
                   NextStepButton(
                     text: "下一步",
                     onPressFunction: (){
-//                      Navigator.push(
-//                          context,
-//                          MaterialPageRoute(
-//                              builder: (BuildContext context) =>EquipmentSettingPage()
-//                          )
-//                      );
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>BackgroundStoryPage()
+                          )
+                      );
                       _investigator.weaponList = _investigatorWeaponList;
                       _investigator.equitpments = _equipmentSettingList;
                       Provider
                           .of<CreateInvestigatorStore>(context,listen: false)
                           .investigator = _investigator;
-                      
+
                     },
                   )
                 ],
