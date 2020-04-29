@@ -364,6 +364,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
     skillController = SkillController();
     occupationController = OccupationController();
     investigatorController = InvestigatorController();
+    await InvestigatorController.test();
     credit = Credit();
     await occupationController.loadAllOccupation();
     await skillController.loadSkills(widget.investigator);
@@ -822,13 +823,13 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                             "下一步",
                             style: TextStyle(color: Colors.white,fontSize: 22),),
                           onPressed: (){
-//                            currentOccupation = occupationList[_currentOccupationIndex];
-//                            widget.investigator.occupation = currentOccupation;
-//                            setState(() {
-//                              haveOccupation = true;
-//                            });
+                            currentOccupation = occupationList[_currentOccupationIndex];
+//
+                            Provider
+                                .of<CreateInvestigatorStore>(context,listen: false)
+                                .investigator.occupation = currentOccupation;
 
-                          if(_formKey.currentState.validate()){
+                            if(_formKey.currentState.validate()){
                             _formKey.currentState.save();
                             Provider
                                 .of<CreateInvestigatorStore>(context,listen: false)

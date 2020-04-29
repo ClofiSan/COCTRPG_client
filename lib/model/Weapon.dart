@@ -8,7 +8,42 @@ class Weapon{
   String _capasity;//装弹量
   String _breakdown;//故障值
   String _time;//常见时代
-  String _price;//价格
+  String _price;
+
+  Map<String,dynamic> dataToJson() => <String,dynamic>{
+  'name':_name,
+  'relevant_skill':_relevantSkill,
+  'damage':_damage,
+  'range':_range,
+  'puncture':_puncture,
+  'frequency':_frequency,
+  'capasity':_capasity,
+  'breakdown':_breakdown,
+  'time':_time,
+  'price':_price
+  };
+
+  static Weapon fromJson(Map<String ,dynamic> jsonData){
+    Weapon weapon = Weapon();
+    weapon.name = jsonData['name'];
+    weapon.range  = jsonData['range'];
+    weapon.relevantSkill = jsonData['relevant_skill'];
+    weapon.damage = jsonData['damage'];
+    weapon.puncture = jsonData['puncture'];
+    weapon.frequency = jsonData['frequency'];
+    weapon.capasity = jsonData['capasity'];
+    weapon.breakdown = jsonData['breakdown'];
+    weapon.time = jsonData['time'];
+    weapon.price = jsonData['price'];
+    return weapon;
+  }
+
+
+  @override
+  String toString() {
+    return 'Weapon{_name: $_name, _relevantSkill: $_relevantSkill, _damage: $_damage, _range: $_range, _puncture: $_puncture, _frequency: $_frequency, _capasity: $_capasity, _breakdown: $_breakdown, _time: $_time, _price: $_price}';
+  } //价格
+
 
   String get name => _name;
 

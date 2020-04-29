@@ -2,10 +2,16 @@ import 'package:coc_trpg/model/Investigator.dart';
 import 'package:coc_trpg/model/Property.dart';
 import 'dart:math' as Math;
 import 'package:coc_trpg/model/Credit.dart';
-
+import 'package:flutter/services.dart';
+import 'dart:convert';
 class InvestigatorController{
 
-
+  static test()async{
+    var data = await rootBundle.loadString('assets/testData.JSON');
+    var jsonData = json.decode(data);
+    Investigator investigator  = Investigator.fromJson(jsonData);
+    print(investigator.toString());
+  }
   final Map<List<int>,dynamic> recentTimeCreditMap = {
     [0,0]:{
       "livingStandard":"身无分文",

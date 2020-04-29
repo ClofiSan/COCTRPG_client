@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
 
 import 'Attribute.dart';
-import 'package:provider/provider.dart' ;
-class Skill extends Attribute with ChangeNotifier {
+class Skill extends Attribute  {
 
   String _description;
   int _initial;
@@ -14,6 +12,42 @@ class Skill extends Attribute with ChangeNotifier {
   int _growPoint;
   List<Skill> _childSkill = List();
 
+  Map<String,dynamic> dataToJson(){
+
+    List<dynamic> childSkillList = _childSkill.map((i)=>i.dataToJson()).toList();
+    return {
+      'label':label,
+      'name':name,
+      'value':value,
+      'initial':initial,
+      'interest_point':interestPoint,
+      'professional_point':professionalPoint,
+      'grow_point':growPoint,
+      'child_skill':childSkillList,
+    };
+  }
+  static Skill fromJson(Map<String,dynamic> jsonData){
+    Skill skill = Skill();
+    skill.name = jsonData['name'];
+    skill.value = jsonData['value'];
+    skill.label = jsonData['label'];
+    skill.initial = jsonData['initial'];
+    skill.interestPoint = jsonData['interest_point'];
+    skill.professionalPoint = jsonData['professional_point'];
+    skill.growPoint = jsonData['grow_point'];
+    skill.description = jsonData['description'];
+    List<Skill> list = List();
+    for(var item in jsonData['child_skill']){
+      list.add(Skill.fromJson(item));
+    }
+    skill.childSkill = list;
+  }
+
+
+  @override
+  String toString() {
+    return 'Skill{_description: $_description, _initial: $_initial, _id: $_id, _skillTypeId: $_skillTypeId, _haveChildSkill: $_haveChildSkill, _interestPoint: $_interestPoint, _professionalPoint: $_professionalPoint, _growPoint: $_growPoint, _childSkill: $_childSkill}';
+  }
 
   Skill(){
     _interestPoint = 0;
@@ -21,32 +55,11 @@ class Skill extends Attribute with ChangeNotifier {
     _growPoint = 0;
   }
 
-  void changeInterestPoint(int i){
-    _interestPoint = i;
-    notifyListeners();
-  }
-
-  void changeProfessionalPoint(int i){
-    _professionalPoint = i;
-    notifyListeners();
-  }
-
-  void changeGrowPoint(int i){
-    _growPoint = i;
-    notifyListeners();
-  }
-
-
 
   int get interestPoint => _interestPoint;
 
   set interestPoint(int value) {
     _interestPoint = value;
-  }
-
-  @override
-  String toString() {
-    return 'Skill{_description: $_description, _initial: $_initial, _id: $_id, _skillTypeId: $_skillTypeId, _haveChildSkill: $_haveChildSkill, _childSkill: $_childSkill}';
   }
 
 

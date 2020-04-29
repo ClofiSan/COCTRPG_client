@@ -3,9 +3,26 @@ class Credit{
   String _cash;
   String _otherAssets;
   String _consumptionLevel;
-  int _creditPoint;
   String _assetsDescription;
+  int _creditPoint;
 
+  Map<String,dynamic> dataToJson() => <String,dynamic>{
+    "living_standard":_livingStandard,
+    "cash":_cash,
+    "other_assets":otherAssets,
+    "consumption_level":consumptionLevel,
+    "assets_description":assetsDescription
+  };
+
+  static Credit fromJson(Map<String ,dynamic> jsonData){
+    Credit credit = Credit();
+    credit.livingStandard = jsonData['living_standard'];
+    credit.consumptionLevel = jsonData['onsumption_level'];
+    credit.cash = jsonData['cash'];
+    credit.otherAssets = jsonData['other_assets'];
+    credit.assetsDescription = jsonData['assets_description'];
+    return credit;
+  }
 
   @override
   String toString() {

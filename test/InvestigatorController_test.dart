@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:coc_trpg/controller/InvestigatorController.dart';
 import 'package:coc_trpg/model/Investigator.dart';
 import 'dart:math' as Math;
+import 'dart:convert';
+import 'package:flutter/services.dart';
 void main(){
 
   group("test investigatorController :", (){
@@ -83,6 +85,11 @@ void main(){
       });
       result = edu * 2 + Math.max(pow, app)*2;
       expect(InvestigatorController.getSkillPointByRules("EDU * 2 + APPorPOW * 2\n", investigator), result);
+    });
+
+    test("test json to model", () async{
+
+
     });
 
 

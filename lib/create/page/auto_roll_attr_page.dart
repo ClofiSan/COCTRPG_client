@@ -204,7 +204,7 @@ class _AutoRollAttrPage extends State<AutoRollAttrPage>{
                           investigator.HP = InvestigatorController.getInvestigatorHP(property);
                           investigator.San = InvestigatorController.getInvestigatorSan(property);
                           investigator.MP = InvestigatorController.getInvestigatorMP(property);
-                          investigator.dmagePlus = damagePlus;
+                          investigator.damagePlus = damagePlus;
                           investigator.Phy = phyi;
                           Provider.of<CreateInvestigatorStore>(context,listen: false).investigator = investigator;
                           Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) =>InterestPointPage(investigator: investigator,)));

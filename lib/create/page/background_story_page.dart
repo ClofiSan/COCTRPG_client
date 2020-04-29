@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:coc_trpg/store/CreateInvestigatorStore.dart';
 import 'package:coc_trpg/create/widget/next_step_button.dart';
 import 'package:coc_trpg/create/widget/normal_input_field.dart';
-
+import 'dart:convert';
 
 class BackgroundStoryPage extends StatefulWidget{
   BackgroundStoryPage({Key key}): super(key: key);
@@ -55,6 +55,7 @@ class _BackgroundStoryPage extends State<BackgroundStoryPage>{
     _investigator = Provider
         .of<CreateInvestigatorStore>(context,listen: false)
         .investigator;
+    _backgroundStory = BackgroundStory();
     _backgroundStoryTitleList = List();
     _backgroundStoryTitleList = InvestigatorController.backgroundStoryList;
     _personalDescriptionController = TextEditingController();
@@ -72,7 +73,9 @@ class _BackgroundStoryPage extends State<BackgroundStoryPage>{
     var _form = _formKey.currentState;
     if(_form.validate()){
       _form.save();
+      print(_personalDescription);
       _backgroundStory.personalDescription = _personalDescription;
+//      _backgroundStory.personalDescription = "1";
       _backgroundStory.faith = _faith;
       _backgroundStory.importantPeople = _importantPeople;
       _backgroundStory.extraPlace = _extraPlace;
@@ -262,6 +265,13 @@ class _BackgroundStoryPage extends State<BackgroundStoryPage>{
                           text: "完成创建",
                           onPressFunction: (){
 
+                            _formSubmit();
+                           var data = Provider
+                               .of<CreateInvestigatorStore>(context,listen: false).investigator;
+                           var jsonData = data.dataToJson();
+                           print(jsonData);
+                           var encodeData = json.encode(jsonData);
+                            print(encodeData);
                           },
                         ),
                       ),
