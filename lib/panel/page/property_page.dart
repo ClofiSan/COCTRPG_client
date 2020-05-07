@@ -21,9 +21,6 @@ class _PropertyPage extends State<PropertyPage>{
   @override
   void initState(){
     super.initState();
-    _scrollController.addListener((){
-      print(_scrollController.offset);
-    });
   }
 
 

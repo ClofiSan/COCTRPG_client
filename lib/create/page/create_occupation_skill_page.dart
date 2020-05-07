@@ -157,6 +157,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                           .of<CreateInvestigatorStore>(context,listen: false)
                           .investigator.credit = credit;
                     }
+                    getTextEditingController(pointType).text = "0";
                   });
 
                 },
@@ -683,7 +684,26 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
     );
 
   }
-  
+
+
+  loadInvestigatorSkills(){
+    Investigator _in = Provider
+        .of<CreateInvestigatorStore>(context,listen: false)
+        .investigator;
+    List<Skill> skillList = List();
+    for(var skills in _in.allSkill){
+      for(var item in skills.skillList){
+        if(item.initial < item.value){
+          skillList.add(item);
+          print(item.label);
+        }
+      }
+    }
+    _in.skills = skillList;
+    Provider
+        .of<CreateInvestigatorStore>(context,listen: false)
+        .investigator = _in;
+  }
 
 
   @override
@@ -769,7 +789,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
             children: <Widget>[
               CreateTitleWidget(
                 title: "职业与技能",
-                description: "不同的职业所对应的技能点各不同",
+                description: "一个好的职业是调查员迈向变态的第一步",
               ),
               Container(
                 margin: EdgeInsets.fromLTRB(40, 0, 40, 0),
@@ -833,7 +853,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                                 .of<CreateInvestigatorStore>(context,listen: false)
                                 .investigator.credit.assetsDescription = assetsDescription;
                           }
-
+                            loadInvestigatorSkills();
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(

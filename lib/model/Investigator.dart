@@ -53,8 +53,9 @@ class Investigator with ChangeNotifier{
 
   Map<String,dynamic> dataToJson(){
     List<dynamic> weaponList = _weaponList.map((i) => i.dataToJson()).toList();
-    List<dynamic> skills = _allSkill.map((i) => i.dataToJson()).toList();
+    List<dynamic> allSkills = _allSkill.map((i) => i.dataToJson()).toList();
     List<dynamic> pList = properties.map((i) => i.dataToJson()).toList();
+    List<dynamic> slist = skills.map((i)=> i.dataToJson()).toList();
 
     return {
       'id':_id,
@@ -80,7 +81,8 @@ class Investigator with ChangeNotifier{
       'properties':pList,
       'weapons':weaponList,
       'equipments':equitpments,
-      'skill_types':skills
+      'skill_types':allSkills,
+      'skills':slist
     };
   }
   static Investigator fromJson(Map<String,dynamic> jsonData){
@@ -103,26 +105,38 @@ class Investigator with ChangeNotifier{
     investigator.credit = Credit.fromJson(jsonData['credit']);
     investigator.occupation = Occupation.fromJson(jsonData['occupation']);
     investigator.backgroundStory = BackgroundStory.fromJson(jsonData['background_story']);
+
     List<Property> pList = List();
     for(var item in jsonData['properties']){
       pList.add(Property.fromJson(item));
     }
     investigator.properties = pList;
+
     List<Weapon> wList = List();
     for(var item in jsonData['weapons']){
       wList.add(Weapon.fromJson(item));
     }
     investigator.weaponList = wList;
+
     List<String> elist = List();
     for(var item in jsonData['equipments']){
       elist.add(item.toString());
     }
     investigator.equitpments = elist;
+
     List<SkillType> stList = List();
     for(var item in jsonData['skill_types']){
       stList.add(SkillType.fromJson(item));
     }
     investigator.allSkill = stList;
+
+    List<Skill> sList = List();
+    for(var item in jsonData['skills']){
+      sList.add(Skill.fromJson(item));
+   }
+    investigator._skills = sList;
+
+
     return investigator;
   }
 

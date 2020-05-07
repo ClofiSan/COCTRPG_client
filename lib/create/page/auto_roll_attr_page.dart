@@ -3,10 +3,10 @@ import 'package:coc_trpg/create/page/random_property_page.dart';
 import 'package:coc_trpg/controller/InvestigatorController.dart';
 import 'package:coc_trpg/model/Property.dart';
 import 'package:coc_trpg/model/Investigator.dart';
-import 'package:coc_trpg/create/page/interest_point_page.dart';
 import 'package:coc_trpg/AppThemeData.dart';
 import 'package:provider/provider.dart';
 import 'package:coc_trpg/store/CreateInvestigatorStore.dart';
+import 'create_base_info_page.dart';
 class AutoRollAttrPage extends StatefulWidget{
   AutoRollAttrPage({Key key}): super(key: key);
 
@@ -207,7 +207,7 @@ class _AutoRollAttrPage extends State<AutoRollAttrPage>{
                           investigator.damagePlus = damagePlus;
                           investigator.Phy = phyi;
                           Provider.of<CreateInvestigatorStore>(context,listen: false).investigator = investigator;
-                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) =>InterestPointPage(investigator: investigator,)));
+                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) =>BaseInfoPage(investigator: investigator,)));
                         },
                       )
                     )

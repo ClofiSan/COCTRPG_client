@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:coc_trpg/model/Investigator.dart';
 import 'package:coc_trpg/utils/AppConfig.dart';
 import 'package:coc_trpg/AppThemeData.dart';
-import 'package:coc_trpg/create/page/create_age_page.dart';
 import 'package:coc_trpg/controller/InvestigatorController.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'create_occupation_skill_page.dart';
 
 class BaseInfoPage extends StatefulWidget{
   BaseInfoPage({Key key, this.investigator}): super(key: key);
@@ -78,7 +78,7 @@ class _BaseInfoPage extends State<BaseInfoPage>{
       print(e);
     }
 
-    Navigator.push(context, new MaterialPageRoute(builder: (context) => new CreateAgePage(investigator: widget.investigator,)));
+    Navigator.push(context, new MaterialPageRoute(builder: (context) => CreateOccupationSkillPage(investigator: widget.investigator,)));
   }
 
   Widget buildLabelContainer(String labelName){

@@ -274,7 +274,6 @@ class _BackgroundStoryPage extends State<BackgroundStoryPage>{
                            var jsonData = data.dataToJson();
                            Storage storage = Storage("/"+data.name+".json");
                            storage.writeFile(json.encode(jsonData));
-                           print(jsonData);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(

@@ -16,9 +16,9 @@ class Skill extends Attribute  {
 
     List<dynamic> childSkillList = _childSkill.map((i)=>i.dataToJson()).toList();
     return {
-      'label':label,
-      'name':name,
-      'value':value,
+      'label':this.label,
+      'name':this.name,
+      'value':this.value,
       'initial':initial,
       'interest_point':interestPoint,
       'professional_point':professionalPoint,
@@ -41,12 +41,13 @@ class Skill extends Attribute  {
       list.add(Skill.fromJson(item));
     }
     skill.childSkill = list;
+    return skill;
   }
 
 
   @override
   String toString() {
-    return 'Skill{_description: $_description, _initial: $_initial, _id: $_id, _skillTypeId: $_skillTypeId, _haveChildSkill: $_haveChildSkill, _interestPoint: $_interestPoint, _professionalPoint: $_professionalPoint, _growPoint: $_growPoint, _childSkill: $_childSkill}';
+    return 'Skill{_label:$label,_description: $_description, _initial: $_initial, _id: $_id, _skillTypeId: $_skillTypeId, _haveChildSkill: $_haveChildSkill, _interestPoint: $_interestPoint, _professionalPoint: $_professionalPoint, _growPoint: $_growPoint, _childSkill: $_childSkill}';
   }
 
   Skill(){

@@ -21,7 +21,7 @@ class CreateTitleWidget extends StatelessWidget{
             ),
           ),
           Container(
-            alignment: Alignment.center,
+            alignment: Alignment.centerLeft,
             padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
             child:   Text(
               this.description,
