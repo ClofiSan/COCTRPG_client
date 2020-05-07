@@ -157,7 +157,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                           .of<CreateInvestigatorStore>(context,listen: false)
                           .investigator.credit = credit;
                     }
-                    getTextEditingController(pointType).text = "0";
+
                   });
 
                 },

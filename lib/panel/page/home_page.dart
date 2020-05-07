@@ -7,8 +7,11 @@ import 'package:coc_trpg/utils/AppConfig.dart';
 import 'note_list_page.dart';
 import 'package:coc_trpg/create/page/create_model_page.dart';
 import 'package:coc_trpg/AppThemeData.dart';
-import 'package:coc_trpg/model/Storage.dart';
 import 'dart:convert';
+import 'dart:io';
+import 'package:coc_trpg/create/widget/next_step_button.dart';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 class HomePage extends StatefulWidget{
   HomePage({Key key}): super(key: key);
 
@@ -28,7 +31,8 @@ class _HomePage extends State<HomePage>{
   int _currentPage = 0;
   var _futureBuilderFuture;
   List<Widget> listViewWidget = List();
-
+  bool hasInvestigator = false;
+  Investigator currentInvestigator;
 
 
   List<Widget> loadSkillWidgetList(List<Skill> skillList){
@@ -90,21 +94,39 @@ class _HomePage extends State<HomePage>{
 
 
   Future loadInvestigators() async{
+
     Investigator investigator = new Investigator();
-//    investigator.name = "空调承太郎";
-//    investigator.properties = loadTestProperty();
-//    investigator.skills = loadTestSkillList();
-    Storage storage = Storage("/aaa.json");
-    String content = await storage.readFile();
-    investigator = Investigator.fromJson(json.decode(content));
-    investigatorList.add(investigator);
-    investigatorList[0].imageUrl = "assets/head.jpg";
+    final localDir = await getApplicationDocumentsDirectory();
+    List<FileSystemEntity> files = [];
+    files = Directory(localDir.path).listSync();
+    for(var item in files){
+
+      print(item.path.substring(item.path.length-4,item.path.length));
+      if(item.path.substring(item.path.length-4,item.path.length) == "json"){
+        hasInvestigator = true;
+        File file = File(item.path);
+        String content = await file.readAsString();
+        print(content);
+        investigator = Investigator.fromJson(json.decode(content));
+        investigator.imageUrl = "assets/head.jpg";
+        investigatorList.add(investigator);
+      }
+    }
+    if(!hasInvestigator){
+      investigator.name = "创建新角色";
+      investigator.properties = loadTestProperty();
+      investigator.skills = loadTestSkillList();
+      investigator.imageUrl = "assets/head.jpg";
+      investigatorList.add(investigator);
+    }
+
+    currentInvestigator = investigatorList[0];
     _pageController = new PageController();
     _pageView = new PageView(
       controller: _pageController,
       children: <Widget>[
-        PropertyPage(attributeData: investigatorList[0].properties,),
-        PropertyPage(attributeData:investigatorList[0].skills),
+        PropertyPage(attributeData: currentInvestigator.properties,),
+        PropertyPage(attributeData:currentInvestigator.skills),
       ],
       onPageChanged: (index){
         setState(() {
@@ -144,7 +166,6 @@ class _HomePage extends State<HomePage>{
     }
     return skillList;
   }
-
 
   Widget buildBottomButton(String imageUrl,String name){
     return Container(
@@ -214,13 +235,59 @@ class _HomePage extends State<HomePage>{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    showInvestigatorChosenDialog(BuildContext context){
+      showDialog(
+          context: context,
+        builder: (context){
+            return AlertDialog(
+              backgroundColor: AppTheme.investigatorMinorColor,
+              title: Text("选择调查员",style: AppTheme.dialogTextStyle,),
+              content: Container(
+                width: MediaQuery.of(context).size.width * 0.5,
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: ListView.builder(
+                  itemCount: investigatorList.length,
+                    itemBuilder: (context,index){
+                      return Container(
+                        child: FlatButton(
+                            onPressed:(){
+                              setState(() {
+                                currentInvestigator = investigatorList[index];
+                                _pageView = new PageView(
+                                  controller: _pageController,
+                                  children: <Widget>[
+                                    PropertyPage(attributeData: currentInvestigator.properties,),
+                                    PropertyPage(attributeData:currentInvestigator.skills),
+                                  ],
+                                  onPageChanged: (index){
+                                    setState(() {
+                                      _currentPage = index;
+                                    });
+                                  },
+                                );
+                                Navigator.of(context).pop();
+                              });
+                            },
+                            child: Text(
+                              investigatorList[index].name,
+                              style:AppTheme.dialogTextStyle,
+                            ),
+                        ),
+                      );
+                    }
+                ),
+              ),
+            );
+        }
+      );
+    }
     Widget buildMainListWidget(){
       return Scaffold(
           backgroundColor: Colors.transparent,
           appBar:  AppBar(
             title: Container(
               alignment: Alignment.center,
-              child: Text(investigatorList[0].name,style: TextStyle(color: Colors.white),),
+              child: Text(currentInvestigator.name,style: TextStyle(color: Colors.white),),
             ),
             backgroundColor: Color(0x22000000),
             elevation: 0,
@@ -238,7 +305,9 @@ class _HomePage extends State<HomePage>{
                       Navigator.push(context,
                           MaterialPageRoute(builder: (BuildContext context) =>CreateModelPage()));
                       break;
-                    case 'B': break;
+                    case 'B':
+                      showInvestigatorChosenDialog(context);
+                      break;
                     case 'C': break;
                   }
                 },
@@ -246,7 +315,32 @@ class _HomePage extends State<HomePage>{
             ],
           ),
           bottomNavigationBar: buildBottomAppbar(),
-          body: ListView(
+          body: !hasInvestigator ?
+          Center(
+
+            child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    "还未创建调查员",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16
+                    ),
+                  ),
+                  NextStepButton(
+                    text: "点击创建",
+                    onPressFunction: (){
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (BuildContext context) =>CreateModelPage()));
+                    },
+                  )
+                ],
+              ),
+            )
+          ):
+          ListView(
             shrinkWrap: true,
             children: <Widget>[
                 Container(
@@ -255,7 +349,7 @@ class _HomePage extends State<HomePage>{
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Image.asset(SANImage,width: 40,height: 40,),
-                  buildIvesHeadImage(investigatorList[0].imageUrl),
+                  buildIvesHeadImage(currentInvestigator.imageUrl),
                   Image.asset(SANImage,width: 40,height: 40,),
                 ],
               ),
