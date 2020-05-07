@@ -73,7 +73,7 @@ class Investigator with ChangeNotifier{
       "Phy":_Phy,
       'damage_plus':_damagePlus,
 
-      'backgound_story':_backgroundStory.dataToJson(),
+      'background_story':_backgroundStory.dataToJson(),
       'occupation':_occupation.dataToJson(),
       'credit':_credit.dataToJson(),
 
@@ -102,7 +102,7 @@ class Investigator with ChangeNotifier{
 
     investigator.credit = Credit.fromJson(jsonData['credit']);
     investigator.occupation = Occupation.fromJson(jsonData['occupation']);
-    investigator.backgroundStory = BackgroundStory.fromJson(jsonData['backgound_story']);
+    investigator.backgroundStory = BackgroundStory.fromJson(jsonData['background_story']);
     List<Property> pList = List();
     for(var item in jsonData['properties']){
       pList.add(Property.fromJson(item));
@@ -113,7 +113,11 @@ class Investigator with ChangeNotifier{
       wList.add(Weapon.fromJson(item));
     }
     investigator.weaponList = wList;
-    investigator.equitpments = jsonData['equipments'];
+    List<String> elist = List();
+    for(var item in jsonData['equipments']){
+      elist.add(item.toString());
+    }
+    investigator.equitpments = elist;
     List<SkillType> stList = List();
     for(var item in jsonData['skill_types']){
       stList.add(SkillType.fromJson(item));

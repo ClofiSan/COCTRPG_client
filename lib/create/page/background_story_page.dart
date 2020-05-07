@@ -9,6 +9,8 @@ import 'package:coc_trpg/store/CreateInvestigatorStore.dart';
 import 'package:coc_trpg/create/widget/next_step_button.dart';
 import 'package:coc_trpg/create/widget/normal_input_field.dart';
 import 'dart:convert';
+import 'package:coc_trpg/model/Storage.dart';
+import 'package:coc_trpg/panel/page/home_page.dart';
 
 class BackgroundStoryPage extends StatefulWidget{
   BackgroundStoryPage({Key key}): super(key: key);
@@ -89,6 +91,7 @@ class _BackgroundStoryPage extends State<BackgroundStoryPage>{
       Provider
           .of<CreateInvestigatorStore>(context,listen: false)
           .investigator = _investigator;
+      print(_backgroundStory.personalDescription);
     }
   }
 
@@ -263,15 +266,21 @@ class _BackgroundStoryPage extends State<BackgroundStoryPage>{
                         margin: EdgeInsets.only(top:20,bottom: 20),
                         child: NextStepButton(
                           text: "完成创建",
-                          onPressFunction: (){
+                          onPressFunction:() {
 
                             _formSubmit();
                            var data = Provider
                                .of<CreateInvestigatorStore>(context,listen: false).investigator;
                            var jsonData = data.dataToJson();
+                           Storage storage = Storage("/"+data.name+".json");
+                           storage.writeFile(json.encode(jsonData));
                            print(jsonData);
-                           var encodeData = json.encode(jsonData);
-                            print(encodeData);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>HomePage()
+                                )
+                            );
                           },
                         ),
                       ),

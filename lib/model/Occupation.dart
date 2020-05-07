@@ -12,7 +12,6 @@ class Occupation{
 
   Map<String,dynamic> dataToJson() => <String,dynamic>{
     'name':_name,
-    'skill_point':_skillList,
     'min_credit':_minCredit,
     'max_credit':_maxCredit,
     'skill_list':_skillList,
@@ -23,7 +22,6 @@ class Occupation{
   static Occupation fromJson(Map<String,dynamic> jsonData){
     Occupation occupation = Occupation();
     occupation.name = jsonData['name'];
-    occupation.skillPoint = jsonData['skill_point'];
     occupation.minCredit = jsonData['min_credit'];
     occupation.maxCredit = jsonData['max_credit'];
     occupation.skillList = jsonData['skill_list'];

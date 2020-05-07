@@ -7,6 +7,8 @@ import 'package:coc_trpg/utils/AppConfig.dart';
 import 'note_list_page.dart';
 import 'package:coc_trpg/create/page/create_model_page.dart';
 import 'package:coc_trpg/AppThemeData.dart';
+import 'package:coc_trpg/model/Storage.dart';
+import 'dart:convert';
 class HomePage extends StatefulWidget{
   HomePage({Key key}): super(key: key);
 
@@ -24,6 +26,8 @@ class _HomePage extends State<HomePage>{
   PageController _pageController;
   PageView _pageView;
   int _currentPage = 0;
+  var _futureBuilderFuture;
+  List<Widget> listViewWidget = List();
 
 
 
@@ -79,13 +83,25 @@ class _HomePage extends State<HomePage>{
   @override
   void initState(){
     super.initState();
-    loadInvestigators();
+    _futureBuilderFuture = loadInvestigators();
+
+
+  }
+
+
+  Future loadInvestigators() async{
+    Investigator investigator = new Investigator();
+    Storage storage = Storage("/aaa.json");
+    String content = await storage.readFile();
+    investigator = Investigator.fromJson(json.decode(content));
+    investigatorList.add(investigator);
+    investigatorList[0].imageUrl = "assets/head.jpg";
     _pageController = new PageController();
     _pageView = new PageView(
       controller: _pageController,
       children: <Widget>[
         PropertyPage(attributeData: investigatorList[0].skills,),
-        PropertyPage(attributeData:investigatorList[0].skills),
+        PropertyPage(attributeData:investigatorList[0].properties),
       ],
       onPageChanged: (index){
         setState(() {
@@ -94,16 +110,11 @@ class _HomePage extends State<HomePage>{
       },
     );
 
-  }
+    listViewWidget.add(buildInvestHeadPanel());
+    listViewWidget.add(buildNoteButton());
+    listViewWidget.add(buildAttributeButtons());
+    listViewWidget.add(buildPageView());
 
-
-  void loadInvestigators(){
-    Investigator investigator = new Investigator();
-    investigator.name = "空调承太郎";
-    investigator.imageUrl = "assets/head.jpg";
-    investigator.properties = loadTestProperty();
-    investigator.skills = loadTestSkillList();
-    investigatorList.add(investigator);
   }
 
   List<Property> loadTestProperty(){
@@ -202,10 +213,189 @@ class _HomePage extends State<HomePage>{
         )
     );
   }
+  buildInvestHeadPanel(){
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Image.asset(SANImage,width: 40,height: 40,),
+          buildIvesHeadImage(investigatorList[0].imageUrl),
+          Image.asset(SANImage,width: 40,height: 40,),
+        ],
+      ),
+    );
+  }
+  buildNoteButton(){
+    return  Container(
+      alignment: Alignment.centerRight,
+      child: RaisedButton(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25),
+                bottomLeft: Radius.circular(25))
+        ),
+        color: Color(0xff20BAC1),
+        child: Container(
+            constraints: BoxConstraints(
+              maxWidth: 110,
+            ),
+            child:Row(
+              children: <Widget>[
+                ImageIcon(
+                  AssetImage(AppConfig.noteImage),
+                  color: Colors.white,
+                  size: 30,
+                ),
+                Text("调查笔记",style: TextStyle(fontSize: 20,
+                    color: Colors.white),),
 
+              ],
+            )
+        ),
+        onPressed: (){
+          Navigator.push(context,
+              MaterialPageRoute(builder: (BuildContext context) =>NoteListPage()));
+        },
+      ),
+    );
+  }
+  buildAttributeButtons(){
+    return  Container(
+      margin: EdgeInsets.only(left: 15),
+      alignment: Alignment.centerLeft,
+      constraints: BoxConstraints(
+        maxWidth: 150,
+      ),
+      child: Row(
+        children: <Widget>[
+          Container(
+            decoration:_currentPage == 0 ? BoxDecoration(
+              color: Colors.white,
+            ):BoxDecoration(
+              color:  Color(0x22000000),),
+            child: Center(
+              child: FlatButton(
+                  onPressed: (){
+                    _pageController.animateToPage(0,
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.decelerate);
+                  },
+                  child: Text("属性",style: TextStyle(fontSize: 18),)
+              ),
+            ),
+          ),
+
+          Container(
+            decoration:_currentPage == 1 ? BoxDecoration(
+              color: Colors.white,
+            ):BoxDecoration(
+              color:  Color(0x22000000),
+            ),
+            child: Center(
+              child: FlatButton(
+                  onPressed: (){
+                    _pageController.animateToPage(1,
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.decelerate);
+                  },
+                  child: Text("技能",style: TextStyle(fontSize: 18),)
+              ),
+            ),
+          ),
+
+        ],
+      ),
+    );
+  }
+  buildPageView(){
+    return Container(
+      margin: EdgeInsets.fromLTRB(15,0,15,5),
+      constraints: BoxConstraints(
+          maxHeight: 400,
+          maxWidth: 180
+      ),
+      child: _pageView,
+      decoration: BoxDecoration(
+        color: Color(0x22000000),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    Widget buildMainListWidget(){
+      return Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar:  AppBar(
+            title: Container(
+              alignment: Alignment.center,
+              child: Text(investigatorList[0].name,style: TextStyle(color: Colors.white),),
+            ),
+            backgroundColor: Color(0x22000000),
+            elevation: 0,
+            actions: <Widget>[
+              PopupMenuButton<String>(
+                color: AppTheme.investigatorMinorColor,
+                itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
+                  selectPopItem(Icons.add, '添加调查员', 'A'),
+                  selectPopItem(Icons.person, '我的调查员', 'B'),
+                ],
+                onSelected: (String action) {
+                  // 点击选项的时候
+                  switch (action) {
+                    case 'A':
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (BuildContext context) =>CreateModelPage()));
+                      break;
+                    case 'B': break;
+                    case 'C': break;
+                  }
+                },
+              )
+            ],
+          ),
+          bottomNavigationBar: buildBottomAppbar(),
+          body: ListView.builder(
+          itemCount:listViewWidget.length ,
+          itemBuilder: (ctx,index){
+            return listViewWidget[index];
+          },
+
+        ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: Color(0xff20BAC1),
+            child: Image.asset(
+              AppConfig.homeImage,width: 30,height: 30,),
+            onPressed: (){
+
+            },
+          )
+      );
+    }
+    Widget _buildFuture(BuildContext context, AsyncSnapshot snapshot){
+      switch (snapshot.connectionState) {
+        case ConnectionState.none:
+          print('none');
+          return Text('ConnnectionState.none');
+        case ConnectionState.active:
+          print('active');
+          return Text('ConnectionState.active');
+        case ConnectionState.waiting:
+          print('waiting');
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        case ConnectionState.done:
+          print('done');
+          if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+          return buildMainListWidget();
+        default:
+          return null;
+      }
+    }
+
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -214,157 +404,9 @@ class _HomePage extends State<HomePage>{
             end: Alignment.bottomCenter,
           )
       ),
-      child:Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar:  AppBar(
-          title: Container(
-            alignment: Alignment.center,
-            child: Text(investigatorList[0].name,style: TextStyle(color: Colors.white),),
-          ),
-          backgroundColor: Color(0x22000000),
-          elevation: 0,
-          actions: <Widget>[
-
-            PopupMenuButton<String>(
-              color: AppTheme.investigatorMinorColor,
-              itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
-                selectPopItem(Icons.add, '添加调查员', 'A'),
-                selectPopItem(Icons.person, '我的调查员', 'B'),
-              ],
-              onSelected: (String action) {
-                // 点击选项的时候
-                switch (action) {
-                  case 'A':
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (BuildContext context) =>CreateModelPage()));
-                    break;
-                  case 'B': break;
-                  case 'C': break;
-                }
-              },
-            )
-          ],
-        ),
-        bottomNavigationBar: buildBottomAppbar(),
-        body:ListView(
-          shrinkWrap: true,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Image.asset(SANImage,width: 40,height: 40,),
-                  buildIvesHeadImage(investigatorList[0].imageUrl),
-                  Image.asset(SANImage,width: 40,height: 40,),
-                ],
-              ),
-            ),
-            Container(
-              alignment: Alignment.centerRight,
-              child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      bottomLeft: Radius.circular(25))
-                ),
-                color: Color(0xff20BAC1),
-                child: Container(
-                  constraints: BoxConstraints(
-                    maxWidth: 110,
-                  ),
-                  child:Row(
-                    children: <Widget>[
-                      ImageIcon(
-                        AssetImage(AppConfig.noteImage),
-                        color: Colors.white,
-                        size: 30,
-                      ),
-                      Text("调查笔记",style: TextStyle(fontSize: 20,
-                          color: Colors.white),),
-
-                    ],
-                  )
-                ),
-                onPressed: (){
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) =>NoteListPage()));
-                },
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 15),
-              alignment: Alignment.centerLeft,
-              constraints: BoxConstraints(
-                maxWidth: 150,
-              ),
-              child: Row(
-                children: <Widget>[
-                Container(
-
-                      decoration:_currentPage == 0 ? BoxDecoration(
-
-                        color: Colors.white,
-                      ):BoxDecoration(
-                        color:  Color(0x22000000),),
-                      child: Center(
-                        child: FlatButton(
-                            onPressed: (){
-                              _pageController.animateToPage(0,
-                                  duration: Duration(milliseconds: 500),
-                                  curve: Curves.decelerate);
-                            },
-                            child: Text("属性",style: TextStyle(fontSize: 18),)
-                        ),
-                      ),
-                    ),
-
-                 Container(
-                      decoration:_currentPage == 1 ? BoxDecoration(
-
-                        color: Colors.white,
-                      ):BoxDecoration(
-                        color:  Color(0x22000000),
-                      ),
-                      child: Center(
-                        child: FlatButton(
-                            onPressed: (){
-                              _pageController.animateToPage(1,
-                                  duration: Duration(milliseconds: 500),
-                                  curve: Curves.decelerate);
-                            },
-                            child: Text("技能",style: TextStyle(fontSize: 18),)
-                        ),
-                      ),
-                    ),
-
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(15,0,15,5),
-              constraints: BoxConstraints(
-                maxHeight: 400,
-                maxWidth: 180
-              ),
-              child: _pageView,
-              decoration: BoxDecoration(
-                  color: Color(0x22000000),
-              ),
-            ),
-
-          ],
-
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Color(0xff20BAC1),
-          child: Image.asset(
-            AppConfig.homeImage,width: 30,height: 30,),
-          onPressed: (){
-
-          },
-        )
+      child:FutureBuilder(
+        builder: _buildFuture,
+        future: _futureBuilderFuture,
       ),
     );
   }

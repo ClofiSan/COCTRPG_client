@@ -364,7 +364,6 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
     skillController = SkillController();
     occupationController = OccupationController();
     investigatorController = InvestigatorController();
-    await InvestigatorController.test();
     credit = Credit();
     await occupationController.loadAllOccupation();
     await skillController.loadSkills(widget.investigator);
@@ -393,7 +392,6 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
 
     investigator =
         Provider.of<CreateInvestigatorStore>(context,listen: false).investigator;
-    print(credit.toString());
   }
 
   @override
