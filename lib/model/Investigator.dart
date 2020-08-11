@@ -27,7 +27,6 @@ class Investigator with ChangeNotifier{
   Occupation _occupation;
   List<Property>_properties;
   List<Skill> _skills;
-  String _background;
   String _imageUrl;
 
   String _international;
@@ -142,7 +141,7 @@ class Investigator with ChangeNotifier{
 
   @override
   String toString() {
-    return 'Investigator{_HP: $_HP, _San: $_San, _MP: $_MP, _MOV: $_MOV, _Phy: $_Phy, _damagePlus: $_damagePlus, _id: $_id, _name: $_name, _age: $_age, _time: $_time, _occupation: $_occupation, _properties: $_properties, _skills: $_skills, _background: $_background, _imageUrl: $_imageUrl, _international: $_international, _language: $_language, _foreignName: $_foreignName, _gender: $_gender, _location: $_location, _hometown: $_hometown, _allSkill: $_allSkill, _noteList: $_noteList, _interestedPoint: $_interestedPoint, _proPoint: $_proPoint, _equitpments: $_equitpments, _weaponList: $_weaponList, _backgroundStory: $_backgroundStory, _credit: $_credit}';
+    return 'Investigator{_HP: $_HP, _San: $_San, _MP: $_MP, _MOV: $_MOV, _Phy: $_Phy, _damagePlus: $_damagePlus, _id: $_id, _name: $_name, _age: $_age, _time: $_time, _occupation: $_occupation, _properties: $_properties, _skills: $_skills, _imageUrl: $_imageUrl, _international: $_international, _language: $_language, _foreignName: $_foreignName, _gender: $_gender, _location: $_location, _hometown: $_hometown, _allSkill: $_allSkill, _noteList: $_noteList, _interestedPoint: $_interestedPoint, _proPoint: $_proPoint, _equitpments: $_equitpments, _weaponList: $_weaponList, _backgroundStory: $_backgroundStory, _credit: $_credit}';
   }
 
   Credit get credit => _credit;
@@ -247,13 +246,6 @@ class Investigator with ChangeNotifier{
   set name(String value) {
     _name = value;
   }
-
-  String get background => _background;
-
-  set background(String value) {
-    _background = value;
-  }
-
 
   int get age => _age;
 

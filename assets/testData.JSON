@@ -1,12 +1,15 @@
 {
-  "name": "jojo",
-  "age": 18,
-  "occupation": {
-    "name": "jojo*2",
-    "skill_point": 222,
-    "min_credit": 60,
-    "max_credit": 33,
-    "skill_list": "wwww"
-  }
+  "user_name":"name",
+  "investigators": [
+    {
+
+    }
+
+  ],
+  "room": [
+    {
+
+    }
+  ]
 
 }

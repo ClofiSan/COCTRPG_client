@@ -55,31 +55,52 @@ class _RandomPropertyPage extends State<RandomPropertyPage>{
             constraints: BoxConstraints(
               maxWidth: 30
             ),
-            child: TextFormField(
-              textAlign: TextAlign.end,
-              controller: propertyControllerMap[label],
-              decoration:buildSkillPointInputDecoration(""),
-              style: TextStyle(fontSize: 18,color: Colors.white,),
-              onChanged: (v){
-                setState(() {
-
-                  for(var item in widget.propertyList){
-                    if(label == item.label){
-                      item.value = int.parse(v);
-                      if(v=="") item.value = 0;
-                      value = v.toString();
-                      sum = InvestigatorController.getInvestigatorPropertySum(widget.propertyList);
-//                      propertyControllerMap[label].text = v.toString();
-                      break;
-                    }
+            child: FlatButton(
+              color: AppTheme.investigatorMinorColor,
+              child: Text(
+                value,
+                style: TextStyle(fontSize: 18,color: Colors.white,),
+              ),
+              onPressed: (){
+                propertyControllerMap[label].text = value;
+                showDialog(
+                    context: context,
+                  builder: (context){
+                      return AlertDialog(
+                        backgroundColor: AppTheme.investigatorMinorColor,
+                        title: Text("输入$label数值",style: AppTheme.dialogTextStyle,),
+                        content: Container(
+                          child: TextField(
+                            autofocus: true,
+                            controller: propertyControllerMap[label],
+                            style: TextStyle(fontSize: 18,color: Colors.white,),
+                            onChanged: (v){
+                              for(var item in widget.propertyList){
+                                if(item.label == label){
+                                  item.value = int.parse(v);
+                                  break;
+                                }
+                              }
+                            },
+                          ),
+                        ),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: Text(
+                              "确定",
+                              style: AppTheme.dialogTextStyle,
+                            ),
+                            onPressed: (){
+                              setState(() {
+                                Navigator.of(context).pop();
+                              });
+                            },
+                          )
+                        ],
+                      );
                   }
-                });
-
+                );
               },
-              onSaved: (v){
-
-              },
-
             ),
           ),
         )

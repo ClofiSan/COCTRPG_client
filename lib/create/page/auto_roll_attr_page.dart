@@ -198,7 +198,6 @@ class _AutoRollAttrPage extends State<AutoRollAttrPage>{
                         color: Color(0xff20BAC1),
                         child: Text("选择",style: TextStyle(color: Colors.white,fontSize: 18),),
                         onPressed: (){
-
                           Investigator investigator = Investigator();
                           investigator.properties = property;
                           investigator.HP = InvestigatorController.getInvestigatorHP(property);

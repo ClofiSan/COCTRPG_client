@@ -10,7 +10,15 @@ class Skill extends Attribute  {
   int _interestPoint;
   int _professionalPoint;
   int _growPoint;
+  Skill _subSkill;
   List<Skill> _childSkill = List();
+
+
+  Skill get subSkill => _subSkill;
+
+  set subSkill(Skill value) {
+    _subSkill = value;
+  }
 
   Map<String,dynamic> dataToJson(){
 
@@ -24,6 +32,7 @@ class Skill extends Attribute  {
       'professional_point':professionalPoint,
       'grow_point':growPoint,
       'child_skill':childSkillList,
+      'sub_skill':subSkill.dataToJson()
     };
   }
   static Skill fromJson(Map<String,dynamic> jsonData){
@@ -36,6 +45,7 @@ class Skill extends Attribute  {
     skill.professionalPoint = jsonData['professional_point'];
     skill.growPoint = jsonData['grow_point'];
     skill.description = jsonData['description'];
+    skill.subSkill = Skill.fromJson(jsonData['sub_skill']);
     List<Skill> list = List();
     for(var item in jsonData['child_skill']){
       list.add(Skill.fromJson(item));

@@ -88,7 +88,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
   InputDecoration buildSkillPointInputDecoration(String hintText){
     return InputDecoration(
         hintText: hintText,
-        hintStyle: TextStyle(fontSize: 16,color: Colors.grey),
+        hintStyle: TextStyle(fontSize: 16,color: Colors.white),
         border: InputBorder.none,
         fillColor: AppTheme.investigatorMinorColor,
         filled: true,
@@ -113,6 +113,8 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
 
 
   Widget buildSkillPointInputWidget(String pointType,int point,Skill samSkill){
+//    getTextEditingController(pointType).text = point.toString();
+
     return  Container(
       margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
       child: Flex(
@@ -172,25 +174,134 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
       ),
     );
   }
+  List<DropdownMenuItem<String>> buildDropdownMenuItemList(Skill skill){
+    List<DropdownMenuItem<String>> list = List();
+    for(var item in skill.childSkill){
+      list.add(
+          DropdownMenuItem<String>(
+            value: item.label,
+            child: Text(item.label,style: TextStyle(color: Colors.black),),
+          )
+      );
+    }
+    return list;
+  }
 
+
+  showSubSkillDialog(Skill skill){
+    Skill _skill;
+    if(skill.subSkill==null){
+      _skill = skill.childSkill[0];
+    }else{
+      _skill = skill.subSkill;
+    }
+    showDialog(
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            backgroundColor: AppTheme.investigatorMinorColor,
+            title: Text("选择子技能",style: AppTheme.dialogTextStyle,),
+            content:
+            Container(
+                width: MediaQuery.of(context).size.width * 0.5,
+                height: MediaQuery.of(context).size.height * 0.5,
+                child:Container(
+                  child: ListView.builder(
+                      itemCount: skill.childSkill.length,
+                      itemBuilder:(context,index){
+                        return Container(
+                          child: FlatButton(
+                              onPressed: (){
+                                setState(() {
+                                  _skill = skill.childSkill[index];
+                                  skill.subSkill = _skill;
+                                });
+                                Navigator.of(context).pop();
+                              },
+                              child: Text(
+                                skill.childSkill[index].label,
+                                style:AppTheme.dialogTextStyle,
+                              )
+                          ),
+                        );
+                      }
+                  ),
+                )
+            ),
+
+          );
+        }
+    );
+  }
+  Widget buildSubSkillExpansionPanel(Skill skill){
+    Skill _skill;
+    if(skill.subSkill==null){
+      _skill = skill.childSkill[0];
+    }else{
+      _skill = skill.subSkill;
+    }
+    return  Container(
+      margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
+      child: Flex(
+        direction: Axis.horizontal,
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: Text(
+              "子技能",
+              style: TextStyle(
+                  color: Colors.black54,
+                  fontSize: 16
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Container(
+              width: MediaQuery.of(context).size.width*0.75,
+              height: 30,
+              child:Container(
+                constraints: BoxConstraints(
+                  maxHeight: 50
+                ),
+                child: FlatButton(
+                  child: Text(_skill.label),
+                  onPressed: (){
+                    showSubSkillDialog(skill);
+                  },
+                )
+              )
+            ),
+          ),
+        ],
+      ),
+    );
+  }
   Widget loadSkillTypeWidget(List<Skill> sameSkills){
     return Container(
       child: ListView.builder(
           shrinkWrap: true,
           itemCount: sameSkills.length,
           itemBuilder: (BuildContext context,int index){
+
             return Container(
                 child:FlatButton(
                     onPressed: (){
-                      if(sameSkills[index].childSkill.length!=0){
-                      }
+                      _interestedController.text = sameSkills[index].interestPoint.toString();
+                      _proController.text = sameSkills[index].professionalPoint.toString();
+                      tmpInterestedPoint = sameSkills[index].interestPoint;
+                      tmpProfessionalPoint = sameSkills[index].professionalPoint;
+                      proDiff = 0;
+                      interestedDiff = 0;
                       showModalBottomSheet(
                         context: context,
                         builder: (BuildContext context) {
-                            return Container(
-                                padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
+
+                          return Container(
+                                padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
                                 decoration: BoxDecoration(
-                                  color:Colors.black38,
+                                  color: Color(0xcc20BAC1)
+//                                  color:Colors.black38,
 //                                    gradient: LinearGradient(
 //                                      colors: [Color(0xFF20BAC1), Colors.grey[600]],
 //                                      begin: Alignment.topCenter,
@@ -202,6 +313,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                                     child:Column(
                                       children: <Widget>[
                                         Text(sameSkills[index].label,style: TextStyle(fontSize: 20,color: Colors.white),),
+                                        sameSkills[index].childSkill.length == 0 ? Container():buildSubSkillExpansionPanel(sameSkills[index]),
                                         buildSkillPointInputWidget("初始",sameSkills[index].initial,sameSkills[index]),
                                         buildSkillPointInputWidget("职业",sameSkills[index].professionalPoint,sameSkills[index]),
                                         buildSkillPointInputWidget("兴趣",sameSkills[index].interestPoint,sameSkills[index]),
@@ -253,8 +365,11 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                                           ),
                                         ),
                                         Container(
+                                          width: MediaQuery.of(context).size.width,
+                                          height: 100,
                                           margin: EdgeInsets.all(5),
-                                          child: Wrap(
+                                          child:ListView(
+                                            shrinkWrap: true,
                                             children: <Widget>[
                                               Container(
                                                 alignment: Alignment.centerLeft,
@@ -269,10 +384,9 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                                             ],
                                           ),
                                         ),
-
                                         Container(
-                                          margin: EdgeInsets.only(top:20),
-                                          child: FlatButton(
+                                          margin: EdgeInsets.only(top:5),
+                                          child: RaisedButton(
                                             color: AppTheme.investigatorMainColor,
                                             child: Container(
                                               child: Text(
@@ -301,6 +415,8 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
                                               tmpProfessionalPoint = 0;
                                               tmpInterestedPoint = 0;
                                               tmpGrowPoint = 0;
+//                                              _interestedController = new TextEditingController();
+//                                              _proController = new TextEditingController();
                                               Navigator.of(context).pop();
                                             },
                                           ),
@@ -474,26 +590,29 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
 
 
   Widget buildSkillPointWidget(String des,int point){
-    return Container(
-      child: Row(
-        children: <Widget>[
-          Container(
-            child: Text(
-              des,
-              style: TextStyle(fontSize: 16,color: Colors.black),
-              textAlign: TextAlign.center,
+    return Expanded(
+      flex: 1,
+      child: Container(
+        child: Row(
+          children: <Widget>[
+            Container(
+              child: Text(
+                des,
+                style: TextStyle(fontSize: 16,color: Colors.black),
+                textAlign: TextAlign.center,
+              ),
+//              margin: EdgeInsets.only(right: 5),
             ),
-            margin: EdgeInsets.only(right: 5),
-          ),
-          Container(
-            child: Text(
-              point.toString(),
-              style: TextStyle(fontSize: 16,color: Colors.white),
-              textAlign: TextAlign.center,
+            Container(
+              child: Text(
+                point.toString(),
+                style: TextStyle(fontSize: 16,color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
+//              margin: EdgeInsets.only(right: 10),
             ),
-            margin: EdgeInsets.only(right: 10),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -503,7 +622,8 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
   }
 
   Widget buildSkillPointRow(){
-    return Row(
+    return Flex(
+      direction: Axis.horizontal,
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -789,7 +909,7 @@ class _CreateOccupationSkillPage extends State<CreateOccupationSkillPage>{
             children: <Widget>[
               CreateTitleWidget(
                 title: "职业与技能",
-                description: "一个好的职业是调查员迈向变态的第一步",
+                description: "一个好的职业是给KP整活儿的第一步",
               ),
               Container(
                 margin: EdgeInsets.fromLTRB(40, 0, 40, 0),
