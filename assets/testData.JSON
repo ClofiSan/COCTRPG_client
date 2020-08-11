@@ -1,79 +1,15 @@
 {
-  "userName": {
-    "PL": {
-      "characters": {
-        "characterId": {
-          "characterName": "",
-          "AGE": 20,
-          "credit": 60,
-          "occupation": "会计师",
-          "properties": {
-
-          },
-          "skills": {
-
-          }
-        },
-        "characterId2": {
-          "characterName": "",
-          "AGE": 20,
-          "occupation": "",
-          "properties": {
-            "credit": 60,
-            "HP": 10,
-            "MP": 10,
-            "SAN": 40,
-            "STR": 60,
-            "CON": 60,
-            "SIZ": 60,
-            "DEX": 60,
-            "APP": 60,
-            "INT": 60,
-            "POW": 60,
-            "EDU": 60,
-            "LUC": 60
-          },
-          "skills": {
-
-          },
-          "background": ""
-
-        }
-      }
-    },
-    "KP": {
-      "KPId":"",
-      "KPName": "",
-      "scenarioId":{
-        "scenarioName": "",
-        "NPCs": {
-          "NPCID": {
-            "NPCName": "",
-            "HP": 10,
-            "MP": 10,
-            "SAN": 40,
-            "properties": {
-
-            },
-            "skills": {
-
-            }
-          },
-          "NPCID2": {
-            "NPCName": "",
-            "HP": 10,
-            "MP": 10,
-            "SAN": 40,
-            "properties": {
-
-            },
-            "skills": {
-
-            }
-          }
-        }
-      }
+  "user_name":"name",
+  "investigators": [
+    {
 
     }
-  }
+
+  ],
+  "room": [
+    {
+
+    }
+  ]
+
 }

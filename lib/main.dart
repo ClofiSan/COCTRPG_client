@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
-import 'page/role_choose_page.dart';
+import 'package:coc_trpg/panel/page/role_choose_page.dart';
+import 'package:provider/provider.dart';
+import 'store/CreateInvestigatorStore.dart';
 void main() {
-  runApp(MyApp());
+
+  runApp(
+    MultiProvider(
+      providers:[
+        ChangeNotifierProvider(
+          create: (context)=>CreateInvestigatorStore(),
+        )
+      ],
+
+      child: MyApp(),
+    )
+  );
 }
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -24,7 +37,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.grey,
-        primaryColor: Color(0xFF20BAC1)
+//        primaryColor: Color(0xFF20BAC1)
+      primaryColor: Colors.white
       ),
       home: RoleChoosePage()
     );

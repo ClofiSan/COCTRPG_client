@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:coc_trpg/utils/ClipTriangleUtil.dart';
-import 'home_page.dart';
+import 'package:coc_trpg/panel/page/home_page.dart';
 class RoleChoosePage extends StatefulWidget{
   RoleChoosePage({Key key}): super(key: key);
 

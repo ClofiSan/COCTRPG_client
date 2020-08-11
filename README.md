@@ -1,16 +1,55 @@
-# coc_trpg
+# COC TRPG
 
-A new Flutter application.
+## 介绍
 
-## Getting Started
+ 一个基于Flutter实现的COC跑团工具，目前还不完整
 
-This project is a starting point for a Flutter application.
+## 预览
 
-A few resources to get you started if this is your first Flutter project:
+<div style="display: flex">
+    <img src="Doc/PLKP.jpg" alt="img" style="zoom:25%;" />
+    <img src="Doc/home.jpg" alt="img" style="zoom:25%;" />
+    <img src="Doc/property.jpg" alt="img" style="zoom:25%;"/>
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+<div style="display: flex">
+    <img src="Doc/info.jpg" alt="img" style="zoom:25%;" />
+    <img src="Doc/profess.jpg" alt="img" style="zoom:25%;" />
+    <img src="Doc/skill.jpg" alt="img" style="zoom:25%;"/>
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+   <div style="display: flex">
+    <img src="Doc/equipment.jpg" alt="img" style="zoom:25%;" />
+    <img src="Doc/background.jpg" alt="img" style="zoom:25%;" />
+
+## TODO
+
+### 第一版本（离线版）
+
+Bug 修复
+
+头像上传保存
+
+equipment的页面删除交互改为添加icon
+
+方形改为圆角
+
+技能选择支持自定义
+
+子技能选择实现
+
+默认选择该职业的职业技能
+
+增加多样的骰子
+
+判定的结果加入延迟效果
+
+年龄判定以减少相关的属性
+
+加入百科功能
+
+加入调查员档案功能
+
+加入我的和设置
+
+### 第二版本（数据持久化）
+
+### 第三版本（IM系统）
