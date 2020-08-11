@@ -6,19 +6,12 @@
 
 ## 预览
 
-<div style="display: flex">
-    <img src="Doc/PLKP.jpg" alt="img" style="zoom:25%;" />
-    <img src="Doc/home.jpg" alt="img" style="zoom:25%;" />
-    <img src="Doc/property.jpg" alt="img" style="zoom:25%;"/>
+![img](Doc/第一部分图片.png)
 
-<div style="display: flex">
-    <img src="Doc/info.jpg" alt="img" style="zoom:25%;" />
-    <img src="Doc/profess.jpg" alt="img" style="zoom:25%;" />
-    <img src="Doc/skill.jpg" alt="img" style="zoom:25%;"/>
+![img](Doc/第二部分图片.png)
 
-   <div style="display: flex">
-    <img src="Doc/equipment.jpg" alt="img" style="zoom:25%;" />
-    <img src="Doc/background.jpg" alt="img" style="zoom:25%;" />
+![img](Doc/第三部分.png)
+
 
 ## TODO
 
